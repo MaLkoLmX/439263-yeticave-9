@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Сергей Кадиров](https://up.htmlacademy.ru/php/9/user/439263).
-* Наставник: `Неизвестно`.
+* Наставник: [Олег Головахин](https://htmlacademy.ru/profile/id849005).
 
 ---
 
