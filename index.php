@@ -72,10 +72,10 @@ $products = [
     ]
 ]; // двумерный массив товаров
 
-function get_price ($price, $letters) {
+function get_price ($price) {
     $price_ceil = ceil($price);
 
-    if ($price_ceil > $letters) {
+    if ($price_ceil > 1000) {
         $price_ceil = number_format($price_ceil, 0, ' ', ' ');
         $price_ceil = $price_ceil .= " ₽";
         return $price_ceil;
@@ -84,21 +84,6 @@ function get_price ($price, $letters) {
         return $price_ceil .= " ₽";
     }
 }
-
-/*foreach ($products as $value => $item) {
-    $price = $item["price"];
-    $price = (string)$price;
-    $num = mb_strlen($price);
-    $price_str = $price[strlen($price)-4] . " ";
-    if ($num > 3) {
-        $price = mb_substr($price, 0);
-        $price_da = $price[strlen($price)-4] = $price[strlen($price)-4] . " ";
-    }
-    print("<pre>");
-    print($price);
-    print("<pre>");
-    print($price_str);
-}*/
 
 ?>
 
@@ -179,7 +164,7 @@ function get_price ($price, $letters) {
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?= get_price($item["price"], 1000); ?><!-- <b class="rub">р</b> --></span>
+                            <span class="lot__cost"><?= get_price($item["price"]); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
