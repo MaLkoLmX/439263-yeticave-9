@@ -67,10 +67,39 @@ $products = [
     [
         "name" => "Маска Oakley Canopy",
         "categories" => "Разное",
-        "price" =>  5400,
+        "price" => 5400,
         "url" => "img/lot-6.jpg"
     ]
 ]; // двумерный массив товаров
+
+function get_price ($price, $letters) {
+    $price_ceil = ceil($price);
+
+    if ($price_ceil > $letters) {
+        $price_ceil = number_format($price_ceil, 0, ' ', ' ');
+        $price_ceil = $price_ceil .= " ₽";
+        return $price_ceil;
+    }
+    else {
+        return $price_ceil .= " ₽";
+    }
+}
+
+/*foreach ($products as $value => $item) {
+    $price = $item["price"];
+    $price = (string)$price;
+    $num = mb_strlen($price);
+    $price_str = $price[strlen($price)-4] . " ";
+    if ($num > 3) {
+        $price = mb_substr($price, 0);
+        $price_da = $price[strlen($price)-4] = $price[strlen($price)-4] . " ";
+    }
+    print("<pre>");
+    print($price);
+    print("<pre>");
+    print($price_str);
+}*/
+
 ?>
 
 <!DOCTYPE html>
@@ -142,7 +171,7 @@ $products = [
             <?php foreach ($products as $key => $item): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
-                    <img src="<?=$item["url"];?>"" width="350" height="260" alt="<?=$item["name"];?>">
+                    <img src="<?=$item["url"];?>" width="350" height="260" alt="<?=$item["name"];?>">
                 </div>
                 <div class="lot__info">
                     <span class="lot__category"><?=$item["category"];?></span>
@@ -150,7 +179,7 @@ $products = [
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$item["price"];?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?= get_price($item["price"], 1000); ?><!-- <b class="rub">р</b> --></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
