@@ -1,5 +1,7 @@
 <?php
 require_once("helpers.php");
+date_default_timezone_set("Europe/Moscow");
+
 $is_auth = rand(0, 1);
 
 $user_name = "Кадиров Сергей"; // укажите здесь ваше имя
@@ -73,6 +75,7 @@ $products = [
     ]
 ]; // двумерный массив товаров
 
+// функция для получения цены товара
 function get_price ($price) {
     $price_ceil = ceil($price);
 
@@ -86,12 +89,28 @@ function get_price ($price) {
     }
 }
 
+// функция для форматирования теста изащиты от хакерских атак
 function esc($str) {
     $text = htmlspecialchars($str);
 
     return $text;
 }
 
+// функция для получения времени до окончания показа лота
+function get_time_to_end ($end_time) {
+    $now_time = time();
+    $mid_time = strtotime($end_time);
+    $dif_time = $mid_time - $now_time;
+    $format_time = date("H:i", $dif_time);
+
+    return $format_time;
+}
+
+// время при котором меняется класс
+$end_time = "1:00";
+$end_time = date("H:i, $end_time");
+
+// подключаем шаблоны
 $page_content = include_template("content.php", [
     "categories" => $categories,
     "products" => $products,

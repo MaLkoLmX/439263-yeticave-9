@@ -3,11 +3,11 @@
     <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
     <ul class="promo__list">
         <!--заполните этот список из массива категорий-->
-        <?php foreach ($categories as $key => $item): ?>
-        <li class="promo__item promo__item--<?=$item["style"]; ?>">
+        <?php foreach ($categories as $key => $item):?>
+        <li class="promo__item promo__item--<?=$item["style"];?>">
             <a class="promo__link" href="pages/all-lots.html"><?=$item["name"]; ?></a>
         </li>
-        <?php endforeach; ?>
+        <?php endforeach;?>
     </ul>
 </section>
 
@@ -17,7 +17,7 @@
     </div>
     <ul class="lots__list">
         <!--заполните этот список из массива с товарами-->
-        <?php foreach ($products as $key => $item): ?>
+        <?php foreach ($products as $key => $item):?>
         <li class="lots__item lot">
             <div class="lot__image">
                 <img src="<?=$item["url"];?>" width="350" height="260" alt="<?=$item["name"];?>">
@@ -28,14 +28,18 @@
                 <div class="lot__state">
                     <div class="lot__rate">
                         <span class="lot__amount">Стартовая цена</span>
-                        <span class="lot__cost"><?= get_price($item["price"]); ?></span>
+                        <span class="lot__cost"><?= get_price($item["price"]);?></span>
                     </div>
+                    <?php if (get_time_to_end("tomorrow") <= $end_time):?>
+                    <div class="lot__timer timer timer--finishing">
+                    <?php else:?>
                     <div class="lot__timer timer">
-                        12:23
+                    <?php endif;?>
+                        <?=get_time_to_end("tomorrow");?>
                     </div>
                 </div>
             </div>
         </li>
-        <?php endforeach; ?>
+        <?php endforeach;?>
     </ul>
 </section>
