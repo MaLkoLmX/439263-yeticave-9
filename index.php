@@ -97,18 +97,23 @@ function esc($str) {
 }
 
 // функция для получения времени до окончания показа лота
-function get_time_to_end ($end_time) {
+function get_time_to_end () {
     $now_time = time();
-    $mid_time = strtotime($end_time);
+    $mid_time = strtotime("tomorrow");
     $dif_time = $mid_time - $now_time;
-    $format_time = date("H:i", $dif_time);
+    $hours = floor($dif_time / 3600);
+    $minutes = floor(($dif_time % 3600) / 60);
+    $format_time = $hours.':'.$minutes;
 
     return $format_time;
 }
 
-// время при котором меняется класс
-$end_time = "1:00";
-$end_time = date("H:i, $end_time");
+// функция для перевода времени в unixtime
+function get_unixtime ($time) {
+    $unix_time = strtotime($time);
+
+    return ($time);
+}
 
 // подключаем шаблоны
 $page_content = include_template("content.php", [
