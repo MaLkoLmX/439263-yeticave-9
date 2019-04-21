@@ -1,0 +1,45 @@
+CREATE DATABASE yaticave
+    DEFAULT CHARACTER SET utf8
+    DEFAULT COLLATE utf8_general_ci;
+
+USE yaticave;
+
+CREATE TABLE categories(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name CHAR(128) NOT NULL UNIQUE,
+  code CHAR(128) NOT NULL UNIQUE
+);
+
+CREATE TABLE lot (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  name CHAR(128) NOT NULL,
+  description CHAR(255),
+  image CHAR(128),
+  price INT NOT NULL,
+  finish_date TIMESTAMP,
+  step_price INT,
+  user INT,
+  winner INT,
+  category INT
+);
+
+CREATE TABLE rate(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  date_rate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  amount INT NOT NULL,
+  user INT,
+  lot INT
+);
+
+CREATE TABLE user(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  date_reg TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  email CHAR(128) NOT NULL UNIQUE,
+  name CHAR(128) NOT NULL UNIQUE,
+  password CHAR(128) NOT NULL,
+  avatar CHAR(128),
+  contact CHAR(255),
+  lots INT,
+  rate INT
+);
