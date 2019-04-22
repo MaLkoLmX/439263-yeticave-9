@@ -6,40 +6,38 @@ USE yaticave;
 
 CREATE TABLE categories(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name CHAR(128) NOT NULL UNIQUE,
-  code CHAR(128) NOT NULL UNIQUE
+  name CHAR(30) UNIQUE,
+  code CHAR(30) UNIQUE
 );
 
 CREATE TABLE lot (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  name CHAR(128) NOT NULL,
-  description CHAR(255),
+  name CHAR(30),
+  description TEXT,
   image CHAR(128),
-  price INT NOT NULL,
-  finish_date TIMESTAMP,
-  step_price INT,
-  user INT,
-  winner INT,
-  category INT
+  price INT(10),
+  finish_date TIMESTAMP DEFAULT NULL,
+  step_price INT(10),
+  id_user INT,
+  id_winner INT,
+  id_category INT
 );
 
 CREATE TABLE rate(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  date_rate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  amount INT NOT NULL,
-  user INT,
-  lot INT
+  date_rate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  amount INT(10),
+  id_user INT,
+  id_lot INT
 );
 
 CREATE TABLE user(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  date_reg TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  email CHAR(128) NOT NULL UNIQUE,
-  name CHAR(128) NOT NULL UNIQUE,
-  password CHAR(128) NOT NULL,
+  date_reg TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  email CHAR(30) UNIQUE,
+  name CHAR(30) UNIQUE,
+  password CHAR(30),
   avatar CHAR(128),
-  contact CHAR(255),
-  lots INT,
-  rate INT
+  contact CHAR(255)
 );
