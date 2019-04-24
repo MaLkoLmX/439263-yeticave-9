@@ -98,10 +98,11 @@ INSERT INTO rate (date_rate, amount, id_user, id_lot) VALUES
 SELECT * FROM categories;
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, цену, название категории*/
-SELECT l.name, price, image, r.amount, c.name FROM lot l
+SELECT l.name, price, image, MAX(r.amount), c.name FROM lot l
 JOIN categories c ON l.id_category= c.id
 JOIN rate r ON r.id_lot = l.id
-WHERE date_finish IS NULL
+WHERE date_finish < NOW()
+GROUP BY r.id
 ORDER BY date_creation DESC;
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
