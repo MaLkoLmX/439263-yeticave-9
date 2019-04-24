@@ -4,7 +4,7 @@ CREATE DATABASE yaticave
 
 USE yaticave;
 
-CREATE TABLE categories(
+CREATE TABLE categories (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name CHAR(30) UNIQUE,
   code CHAR(30) UNIQUE
@@ -24,7 +24,7 @@ CREATE TABLE lot (
   id_category INT
 );
 
-CREATE TABLE rate(
+CREATE TABLE rate (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_rate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   amount INT(10),
@@ -32,7 +32,7 @@ CREATE TABLE rate(
   id_lot INT
 );
 
-CREATE TABLE user(
+CREATE TABLE user (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_reg TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   email CHAR(30) UNIQUE,

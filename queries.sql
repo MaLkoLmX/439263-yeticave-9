@@ -102,7 +102,7 @@ SELECT l.name, price, image, r.amount, c.name FROM lot l
 JOIN categories c ON l.id_category= c.id
 JOIN rate r ON r.id_lot = l.id
 WHERE date_finish IS NULL
-ORDER BY create_date DESC;
+ORDER BY date_creation DESC;
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
 SELECT l.name, description, image, price, c.name FROM lot l
