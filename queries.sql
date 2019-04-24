@@ -11,6 +11,7 @@ INSERT INTO categories (name, code) VALUES
 INSERT INTO user (date_reg, email, name, password, avatar, contact) VALUES
     ("2019-02-23 19:17", "benfa@gmail.com", "Бен", "4pok51Q", "1.jpg", "+79041246944"),
     ("2019-02-27 10:56", "mattbe@gmail.com", "Мэт", "xthnjd1Naf", "123.jpg", "+79201246777"),
+    ("2019-02-27 10:56", "markmi@gmail.com", "Марк", "LfrEkf7", "ads.jpg", "+79201111117"),
     ("2019-02-27 10:56", "donaldkal@gmail.com", "Дональд", "gjRfqc9", "4132.jpg", "+79199467741");
 
 /*Заполнили lot*/
@@ -92,6 +93,7 @@ INSERT INTO lot (date_creation, name, description, image, price, date_finish, st
 INSERT INTO rate (date_rate, amount, id_user, id_lot) VALUES
     ("2019-04-23 21:22", 32000, 1, 1),
     ("2019-04-23 22:54", 7500, 1, 2),
+    ("2019-04-23 17:04", 27500, 2, 1),
     ("2019-04-24 14:11", 9999, 1, 3);
 
 /*получить все категории*/
@@ -102,8 +104,7 @@ SELECT l.name, price, image, MAX(r.amount), c.name FROM lot l
 JOIN categories c ON l.id_category= c.id
 JOIN rate r ON r.id_lot = l.id
 WHERE date_finish < NOW()
-GROUP BY r.id
-ORDER BY date_creation DESC;
+GROUP BY r.id, l.name ORDER BY date_creation DESC;
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
 SELECT l.name, description, image, price, c.name FROM lot l
@@ -111,7 +112,7 @@ JOIN categories c ON l.id_category = c.id
 WHERE l.id = 1;
 
 /*обновить название лота по его идентификатору*/
-UPDATE lot SET name = "Да" WHERE id = 1;
+UPDATE lot SET name = "Да" WHERE id = 3;
 
 /*получить список самых свежих ставок для лота по его идентификатору*/
 SELECT date_rate, amount FROM lot l
