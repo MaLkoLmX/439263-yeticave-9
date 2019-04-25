@@ -2,11 +2,71 @@
 require_once("helpers.php");
 date_default_timezone_set("Europe/Moscow");
 
+$link = mysqli_connect("127.0.0.1", "root", "", "yaticave");/*подключение к СУБД*/
+mysqli_set_charset($link, "utf8");
+
+$categories = [];
+$products = [];
+$content = "";
+
+if ($link == false) {
+    $error = mysqli_connect_error();
+    $content = include_template("404.html", ["error" => $error]);
+}
+else {
+    $sql = "SELECT name, code FROM categories";
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($link);
+        $content = include_template("404.html", ["error" => $error]);
+    }
+
+    $sql = "SELECT image, lot.name, category.name, price FROM lot JOIN categories ON lot.id_category = categories.id";
+
+    if ($res = mysqli_query($link, $sql)) {
+        $products = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($link);
+        $content = include_template("404.html", ["error" => $error]);
+    }
+
+    /*Заполняем лот*/
+    /*$sql = "SELECT image, name, price, categories.name FROM lot l JOIN categories ON lot.id_category = categories.id";
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+        $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($link);
+        $content = include_template("404.html", ["error" => $error]);
+    }*/
+
+    $sql = "SELECT image, name, price, categories.name FROM lot l JOIN categories ON lot.id_category = categories.id";
+    if ($res = mysqli_query($link, $sql)) {
+        $products = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        $content = include_template("content.php", ["products" => $products]);
+    }
+    else {
+        $content = include_template("404.html", ["error" => $error]);
+    }
+}
+
+print_r($products);
+
 $is_auth = rand(0, 1);
 
 $user_name = "Кадиров Сергей"; // укажите здесь ваше имя
 
-$categories = [
+$index = 0;
+$num_count = count($categories);
+
+/*$categories = [
     [
         "name" => "Доски и лыжи",
         "style" => "boards"
@@ -31,12 +91,10 @@ $categories = [
         "name" => "Разное",
         "style" => "other"
     ]
-];
+];*/
 
-$index = 0;
-$num_count = count($categories);
 
-$products = [
+/*$products = [
     [
         "name" => "2014 Rossignol District Snowboard",
         "categories" => "Доски и лыжи",
@@ -73,14 +131,14 @@ $products = [
         "price" => 5400,
         "url" => "img/lot-6.jpg"
     ]
-]; // двумерный массив товаров
+];*/ // двумерный массив товаров
 
 // функция для получения цены товара
 function get_price ($price) {
     $price_ceil = ceil($price);
 
     if ($price_ceil > 1000) {
-        $price_ceil = number_format($price_ceil, 0, ' ', ' ');
+        $price_ceil = number_format($price_ceil, 0, " ", " ");
         $price_ceil = $price_ceil .= " ₽";
         return $price_ceil;
     }
@@ -103,7 +161,7 @@ function get_time_to_end () {
     $dif_time = $mid_time - $now_time;
     $hours = floor($dif_time / 3600);
     $minutes = floor(($dif_time % 3600) / 60);
-    $format_time = $hours.':'.$minutes;
+    $format_time = $hours.":".$minutes;
 
     return $format_time;
 }
