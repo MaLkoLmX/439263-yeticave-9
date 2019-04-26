@@ -23,7 +23,7 @@
                 <img src="<?=$item["image"];?>" width="350" height="260" alt="<?=$item["name"];?>">
             </div>
             <div class="lot__info">
-                <span class="lot__category"><?=$item["category.name"];?></span>
+                <span class="lot__category"><?=$item["categories"];?></span>
                 <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=$item["name"];?></a></h3>
                 <div class="lot__state">
                     <div class="lot__rate">
