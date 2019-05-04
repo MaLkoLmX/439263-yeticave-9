@@ -101,7 +101,7 @@ SELECT * FROM categories;
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, цену, название категории*/
 SELECT l.name, price, image, MAX(r.amount), c.name FROM lot l
-JOIN categories c ON l.id_category= c.id
+JOIN categories c ON l.id_category = c.id
 JOIN rate r ON r.id_lot = l.id
 WHERE date_finish < NOW()
 GROUP BY r.id_lot ORDER BY date_creation DESC;

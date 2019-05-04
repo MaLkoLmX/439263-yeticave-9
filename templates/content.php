@@ -4,7 +4,7 @@
     <ul class="promo__list">
         <!--заполните этот список из массива категорий-->
         <?php foreach ($categories as $key => $item):?>
-        <li class="promo__item promo__item--<?=$item["style"];?>">
+        <li class="promo__item promo__item--<?=$item["code"];?>">
             <a class="promo__link" href="pages/all-lots.html"><?=$item["name"]; ?></a>
         </li>
         <?php endforeach;?>
@@ -20,10 +20,10 @@
         <?php foreach ($products as $key => $item):?>
         <li class="lots__item lot">
             <div class="lot__image">
-                <img src="<?=$item["url"];?>" width="350" height="260" alt="<?=$item["name"];?>">
+                <img src="<?=$item["image"];?>" width="350" height="260" alt="<?=$item["name"];?>">
             </div>
             <div class="lot__info">
-                <span class="lot__category"><?=$item["category"];?></span>
+                <span class="lot__category"><?=$item["categories"];?></span>
                 <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=$item["name"];?></a></h3>
                 <div class="lot__state">
                     <div class="lot__rate">
