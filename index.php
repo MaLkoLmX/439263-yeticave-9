@@ -36,11 +36,11 @@ else {
     }
 
     /*Заполняем лот*/
-    $sql = "SELECT l.name, price, image, c.name as categories FROM lot l
+    $sql = "SELECT l.name, price, image, c.name as categories, MAX(r.amount) FROM lot l
             JOIN categories c ON l.id_category = c.id
             JOIN rate r ON r.id_lot = l.id
             WHERE date_finish < NOW()
-            GROUP BY r.id_lot ORDER BY date_creation DESC";
+            GROUP BY r.id_lot ORDER BY date_creation DESC LIMIT 6";
 
     if ($res = mysqli_query($link, $sql)) {
         $products = mysqli_fetch_all($res, MYSQLI_ASSOC);
