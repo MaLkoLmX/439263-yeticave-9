@@ -111,5 +111,7 @@ $layout_content = include_template("layout.php", [
     "title" => "Главная страница"
 ]);
 
+print_($_GET);
+
 print($layout_content);
 ?>
