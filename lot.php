@@ -32,7 +32,7 @@
         $content = include_template("404.html", ["error" => $error]);
     }
 
-    $sql = "SELECT l.name as title, price, image, c.name as categories, description FROM lot l
+    $sql = "SELECT l.name as title, price, image, c.name as categories, description, price + step_price as min_price FROM lot l
             JOIN categories c ON l.id_category = c.id
             WHERE l.id = $id;"
     $result = mysqli_query($link, $sql);
