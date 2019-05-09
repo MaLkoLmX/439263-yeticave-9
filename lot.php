@@ -35,10 +35,9 @@
     $sql = "SELECT l.name as title, price, image, c.name as categories, description, price + step_price as min_price FROM lot l
             JOIN categories c ON l.id_category = c.id
             WHERE l.id = $id;"
-    $result = mysqli_query($link, $sql);
 
-    if ($result) {
-        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    if ($result_lot = mysqli_query($link, $sql)) {
+        $lots = mysqli_fetch_all($result_lot, MYSQLI_ASSOC);
         $content = include_template("lot.php", ["lots" => $lots]);
     }
     else {
@@ -47,7 +46,7 @@
 
     $lots_content = include_template("layout.php", [
         "categories" => $categories,
-        "content" => $lots,
+        "content" => $content,
         "is_auth" => $is_auth,
         "user_name" => $user_name,
         "title" => "Лот"
