@@ -53,4 +53,5 @@
     ]);
 
     print($lots_content);
+    print($_GET['id']);
 ?>

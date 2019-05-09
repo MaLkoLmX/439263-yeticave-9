@@ -19,7 +19,7 @@ else {
 }
 
 /*Заполняем лот*/
-$sql = "SELECT l.name, price, image, c.name as categories, MAX(r.amount) FROM lot l
+$sql = "SELECT l.id as id_lot, l.name, price, image, c.name as categories, MAX(r.amount) FROM lot l
         JOIN categories c ON l.id_category = c.id
         JOIN rate r ON r.id_lot = l.id
         WHERE date_finish < NOW()
@@ -32,13 +32,6 @@ if ($res = mysqli_query($link, $sql)) {
 else {
     $content = include_template("404.html", ["error" => $error]);
 }
-
-$is_auth = rand(0, 1);
-
-$user_name = "Кадиров Сергей"; // укажите здесь ваше имя
-
-$index = 0;
-$num_count = count($categories);
 
 // подключаем шаблоны
 $page_content = include_template("content.php", [
