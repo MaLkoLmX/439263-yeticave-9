@@ -1,8 +1,8 @@
 <nav class="nav">
   <ul class="nav__list container">
-    <?php foreach ($categories as $key => $item):?>
+    <?php foreach ($lots as $key => $item):?>
     <li class="nav__item">
-      <a href="all-lots.html"><?=$item["name"];?></</a>
+      <a href="all-lots.html"><?=$item["categories"];?></</a>
     </li>
     <?php endforeach; ?>
   </ul>
@@ -14,9 +14,9 @@
   <div class="lot-item__content">
     <div class="lot-item__left">
       <div class="lot-item__image">
-        <img src="<?=$item["image"];?>" width="730" height="548" alt="<?=$item["name"];?>">
+        <img src="<?=$item["image"];?>" width="730" height="548" alt="<?=$item["title"];?>">
       </div>
-      <p class="lot-item__category">Категория: <span><?=$item["name"];?></span></p>
+      <p class="lot-item__category">Категория: <span><?=$item["title"];?></span></p>
       <p class="lot-item__description"><?=$item["description"];?></p>
     </div>
     <div class="lot-item__right">

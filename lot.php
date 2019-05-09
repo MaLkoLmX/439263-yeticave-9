@@ -1,19 +1,26 @@
 <?php
   require_once("helpers.php");
-  date_default_timezone_set("Europe/Moscow");
-
-  $link = mysqli_connect("127.0.0.1", "root", "", "yaticave");/*подключение к СУБД*/
-  mysqli_set_charset($link, "utf8");
+  require_once("functions.php");
+  require_once("link.php");
 
   $categories = [];
   $lots = [];
   $content = "";
 
-  if (!isset($_GET['id'])) {
-    $error = mysqli_connect_error();
-    $content = include_template("404.html", ["error" => $error]);
+
+  if (!isset($_GET['id'])) {//проверяем на наличие ID
+    header("Location: /404.php");
   }
   else {
+    if ($result) {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($link);
+        $content = include_template("404.html", ["error" => $error]);
+    }
+
+    $id = $_GET['id'];
     $sql = "SELECT name FROM categories";
     $result = mysqli_query($link, $sql);
 
@@ -25,35 +32,25 @@
         $content = include_template("404.html", ["error" => $error]);
     }
 
-    $sql = "SELECT image, lot.name, category.name, price FROM lot JOIN categories ON lot.id_category = categories.id";
-    if ($res = mysqli_query($link, $sql)) {
-        $products = mysqli_fetch_all($res, MYSQLI_ASSOC);
-    }
-    else {
-        $error = mysqli_error($link);
-        $content = include_template("404.html", ["error" => $error]);
-    }
-
-    $sql = "SELECT l.name as title, price, image, c.name as categories, MAX(r.amount), description FROM lot l
+    $sql = "SELECT l.name as title, price, image, c.name as categories, description FROM lot l
             JOIN categories c ON l.id_category = c.id
-            JOIN rate r ON r.id_lot = l.id
-            WHERE date_finish < NOW()
-            GROUP BY r.id_lot ORDER BY date_creation DESC LIMIT 6";
+            WHERE l.id = $id;"
+    $result = mysqli_query($link, $sql);
 
-    if ($result = mysqli_query($link, $sql)) {
+    if ($result) {
         $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $content = include_template("content.php", ["products" => $products]);
+        $content = include_template("lot.php", ["lots" => $lots]);
     }
     else {
         $content = include_template("404.html", ["error" => $error]);
     }
 
-    $lots_content = include_template("lot.php", [
+    $lots_content = include_template("layout.php", [
         "categories" => $categories,
-        "title" => $title,
-        "description" => $description,
-        "price" => "$price",
-        "image" => "$image"
+        "content" => $lots,
+        "is_auth" => $is_auth,
+        "user_name" => $user_name,
+        "title" => "Лот"
     ]);
 
     print($lots_content);
