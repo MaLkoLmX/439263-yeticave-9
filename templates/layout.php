@@ -37,9 +37,7 @@
                 </li>
             </ul>
             <?php endif;?>
-
         <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
-
         </nav>
     </div>
 </header>
@@ -47,15 +45,16 @@
 <main class="container">
     <?=$content;?>
 </main>
-</div>
 
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
+            <?php foreach ($categories as $key => $item):?>
             <li class="nav__item">
-                <a href="pages/all-lots.html">Название категории</a>
+              <a href="all-lots.html"><?=$item["name"];?></</a>
             </li>
+            <?php endforeach; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">

@@ -19,7 +19,7 @@ else {
 }
 
 /*Заполняем лот*/
-$sql = "SELECT l.id as id_lot, l.name, price, image, c.name as categories, MAX(r.amount) FROM lot l
+$sql = "SELECT l.id as id_lot, l.name, price, image, c.name as categories, MAX(r.amount), date_finish FROM lot l
         JOIN categories c ON l.id_category = c.id
         JOIN rate r ON r.id_lot = l.id
         WHERE date_finish < NOW()
@@ -36,10 +36,11 @@ else {
 // подключаем шаблоны
 $page_content = include_template("content.php", [
     "categories" => $categories,
-    "products" => $products,
+    "products" => $products
 ]);
 
 $layout_content = include_template("layout.php", [
+    "categories" => $categories,
     "content" => $page_content,
     "is_auth" => $is_auth,
     "user_name" => $user_name,

@@ -30,13 +30,13 @@
                         <span class="lot__amount">Стартовая цена</span>
                         <span class="lot__cost"><?= get_price($item["price"]);?></span>
                     </div>
-                    <?php if (get_unixtime (get_time_to_end()) <= get_unixtime ("1:00")):?>
+                    <?php if (get_unixtime (get_time($item["date_finish"])) <= get_unixtime ("1:00")):?>
                     <div class="lot__timer timer timer--finishing">
                     <?php else:?>
                     <div class="lot__timer timer">
-                    <?php endif;?>
-                        <?=get_time_to_end();?>
+                        <?=get_time($item["date_finish"]);?>
                     </div>
+                    <?php endif;?>
                 </div>
             </div>
         </li>

@@ -1,8 +1,8 @@
 <nav class="nav">
   <ul class="nav__list container">
-    <?php foreach ($lots as $key => $item):?>
+    <?php foreach ($categories as $key => $item):?>
     <li class="nav__item">
-      <a href="all-lots.html"><?=$item["categories"];?></</a>
+      <a href="all-lots.html"><?=$item["name"];?></a>
     </li>
     <?php endforeach; ?>
   </ul>
@@ -14,23 +14,30 @@
   <div class="lot-item__content">
     <div class="lot-item__left">
       <div class="lot-item__image">
-        <img src="<?=$item["image"];?>" width="730" height="548" alt="<?=$item["title"];?>">
+        <img src="<?=$item["image"];?>" width="730" height="548" alt="<?=$item["categories"];?>">
       </div>
-      <p class="lot-item__category">Категория: <span><?=$item["title"];?></span></p>
+      <p class="lot-item__category">Категория: <span><?=$item["categories"];?></span></p>
       <p class="lot-item__description"><?=$item["description"];?></p>
     </div>
     <div class="lot-item__right">
       <div class="lot-item__state">
+
+        <?php if (get_unixtime (get_time($item["date_finish"])) <= get_unixtime ("1:00")):?>
+        <div class="lot-item__timer timer timer--finishing">
+        <?php else:?>
         <div class="lot-item__timer timer">
-          <?=$item["date_finish"];?>
+            <?=get_time($item["date_finish"]);?>
         </div>
+        <?php endif;?>
+
+
         <div class="lot-item__cost-state">
           <div class="lot-item__rate">
             <span class="lot-item__amount">Текущая цена</span>
-            <span class="lot-item__cost"><?=$item["price"];?></span>
+            <span class="lot-item__cost"><?=get_price($item["price"]);?></span>
           </div>
           <div class="lot-item__min-cost">
-            Мин. ставка <span><?=$item["min_price"];?> р</span>
+            Мин. ставка <span><?=$item["price"] + $item["step_price"];?> р</span>
           </div>
         </div>
         <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">

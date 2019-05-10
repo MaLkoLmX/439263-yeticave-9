@@ -13,7 +13,7 @@ function get_price ($price) {
     }
 }
 
-// функция для форматирования ткеста изащиты от хакерских атак
+// функция для форматирования ткеста и защиты от хакерских атак
 function esc($str) {
     $text = htmlspecialchars($str);
 
@@ -21,9 +21,9 @@ function esc($str) {
 }
 
 // функция для получения времени до окончания показа лота
-function get_time_to_end () {
+function get_time_to_end ($time) {
     $now_time = time();
-    $mid_time = strtotime("tomorrow");
+    $mid_time = strtotime($time);
     $dif_time = $mid_time - $now_time;
     $hours = floor($dif_time / 3600);
     $minutes = floor(($dif_time % 3600) / 60);
@@ -36,6 +36,13 @@ function get_time_to_end () {
 function get_unixtime ($time) {
     $unix_time = strtotime($time);
 
-    return ($time);
+    return ($unix_time);
+}
+
+function get_time ($time) {
+    $date = strtotime($time);
+    $format_time = date("H:i:s", $time);
+
+    return $format_time;
 }
 ?>
