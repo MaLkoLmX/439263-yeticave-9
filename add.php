@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             "dict" => $dict
         ]);
     } else {
-        $sql = "INSERT INTO lots (title, description, price, date_finish, step_price, id_category, image, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+        $sql = "INSERT INTO lot (title, description, price, date_finish, step_price, id_category, image, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
         $stmt = db_get_prepare_stmt($link, $sql, [$lot["title"], $lot["description"], $lot["price"], $lot["date_finish"], $lot["step_price"], $lot["id_category"], $lot["image"]]);
         $res = mysqli_stmt_execute($stmt);
 
