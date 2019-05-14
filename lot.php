@@ -7,6 +7,9 @@ $categories = [];
 $lots = [];
 $content = "";
 
+$id = (int) $_GET['id'];
+$sql = "SELECT name FROM categories";
+$result = mysqli_query($link, $sql);
 
 if (!isset($_GET['id'])) {//проверяем на наличие ID
 header("Location: /404.php");
@@ -19,17 +22,6 @@ else {
         $error = mysqli_error($link);
         $content = include_template("404.html", ["error" => $error]);
     }
-}
-
-$id = (int) $_GET['id'];
-$sql = "SELECT name FROM categories";
-$result = mysqli_query($link, $sql);
-if ($result) {
-    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-}
-else {
-    $error = mysqli_error($link);
-    $content = include_template("404.html", ["error" => $error]);
 }
 
 $sql = "SELECT l.id as id_lot, l.name as title, description,  price, step_price, image, c.name as categories, MAX(r.amount), date_finish FROM lot l
