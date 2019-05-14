@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 /*$page_content = include_template('sign-up.php', [$tpl_data, "categories" => $categories]);*/
 
-$signUp_content = include_template("layout.php", [
+$sign_up_content = include_template("layout.php", [
     "categories" => $categories,
     "content" => $page_content,
     "is_auth" => $is_auth,
@@ -66,5 +66,5 @@ $signUp_content = include_template("layout.php", [
     "title" => "Регистрация"
 ]);
 
-print($signUp_content);
+print($sign_up_content);
 ?>

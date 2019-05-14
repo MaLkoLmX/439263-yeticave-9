@@ -21,7 +21,7 @@ if (!$link) {
 }
 
 $page_content = include_template('login.php', ["categories" => $categories]);
-$signUp_content = include_template("layout.php", [
+$login_content = include_template("layout.php", [
     "categories" => $categories,
     "content" => $page_content,
     "is_auth" => $is_auth,
@@ -29,5 +29,5 @@ $signUp_content = include_template("layout.php", [
     "title" => "Регистрация"
 ]);
 
-print($signUp_content);
+print($login_content);
 ?>
