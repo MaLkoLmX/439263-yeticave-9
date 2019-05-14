@@ -7,7 +7,7 @@ $categories = [];
 $lots = [];
 $content = "";
 
-$sql = "SELECT name FROM categories";
+$sql = "SELECT id, name FROM categories";
 $result = mysqli_query($link, $sql);
 if (!$link) {
     header("Location: /404.php");
@@ -23,7 +23,7 @@ if (!$link) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lot = $_POST["lot"];
-    $required = ["lot-name", "message", "lot-rate", "lot-step", "lot-date"];
+    $required = ["lot-name", "message", "lot-rate", "lot-step", "lot-date, lot-cat"];
     $dict = ["lot-name" => "Название", "message" => "Описание товара", "lot-rate" => "Стартовая цена", "lot-step" => "Ставка", "lot-date" => "Дата окончания лота", "lot_image" => "Фото тоавра", "lot-cat" => "Категория товара"];
     $errors = [];
 
@@ -38,27 +38,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!is_date_valid($_POST["lot-date"])) {
         $errors["lot-date"] = "Неправильный формат даты";
     }
-    if(!is_int($_POST["lot-rate"]) || empty($_POST["lot-rate"])) {
-        $errors["lot-rate"] = "Введите число";
+    if (!strtotime($_POST["lot-date"]) < (strtotime("today") + 86400)) {
+        $errors["lot-date"] = "Укажите дату окончания не раньше, чем через 24 часа";
     }
-    if(!is_int($_POST["lot-step"]) || empty($_POST["lot-step"])) {
-        $errors["lot-step"] = "Введите число!";
+    if(!is_int($_POST["lot-rate"]) && $_POST["lot-rate"] <= 0) {
+        $errors["lot-rate"] = "Введите целое число больше ноля";
+    }
+    if(!is_int($_POST["lot-step"]) && $_POST["lot-step"] <= 0) {
+        $errors["lot-step"] = "Введите целое число больше ноля";
     }
 
-    if (isset($_FILES["lot_image"]["name"])) {
+    if ($_FILES["lot_image"]["error"] = 0) {
         $tmp_name = $_FILES["lot_image"]["tmp_name"];
-        $path = $_FILES["lot_image"]["name"];
+        /*$path = $_FILES["lot_image"]["name"];*/
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
         if ($file_type !== "image/png" && $file_type !== "image/jpeg") {
             $errors["file"] = "Загрузите картинку в другом формате";
         }   else {
-            move_uploaded_file($tmp_name, "uploads/" . $path);
-            $lot["path"] = "uploads/" . $path;
+            move_uploaded_file($tmp_name, "uploads/" . uniqid());
+            $lot["path"] = "uploads/" . uniqid();
         }
     } else {
-        $errors["file"] = "Вы не загрузили файл";
+        $errors["image"] = "Вы не загрузили файл";
     }
 
     if (count($errors)) {
@@ -93,6 +96,7 @@ $add_content = include_template("layout.php", [
     "user_name" => $user_name,
     "title" => "Добавить лот"
 ]);
+
 
 print($add_content);
 ?>
