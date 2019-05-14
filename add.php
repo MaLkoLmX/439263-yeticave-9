@@ -32,19 +32,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors[$key] = "Это поле надо заполнить";
         }
     }
-    if ($_POST["lot-cat"] == "Выберите категорию") {
+    if (empty($errors) && $_POST["lot-cat"] == "Выберите категорию") {
         $errors["lot-cat"] = "Категория не выбрана";
     }
-    if (!is_date_valid($_POST["lot-date"])) {
+    if (empty($errors) && !is_date_valid($_POST["lot-date"])) {
         $errors["lot-date"] = "Неправильный формат даты";
     }
-    if (!strtotime($_POST["lot-date"]) < (strtotime("today") + 86400)) {
+    if (empty($errors) && !strtotime($_POST["lot-date"]) < (strtotime("today") + 86400)) {
         $errors["lot-date"] = "Укажите дату окончания не раньше, чем через 24 часа";
     }
-    if(!is_int($_POST["lot-rate"]) && $_POST["lot-rate"] <= 0) {
+    if (empty($errors) && !is_int($_POST["lot-rate"]) && $_POST["lot-rate"] <= 0) {
         $errors["lot-rate"] = "Введите целое число больше ноля";
     }
-    if(!is_int($_POST["lot-step"]) && $_POST["lot-step"] <= 0) {
+    if (empty($errors) && !is_int($_POST["lot-step"]) && $_POST["lot-step"] <= 0) {
         $errors["lot-step"] = "Введите целое число больше ноля";
     }
 
@@ -97,6 +97,6 @@ $add_content = include_template("layout.php", [
     "title" => "Добавить лот"
 ]);
 
-
+print($errors);
 print($add_content);
 ?>
