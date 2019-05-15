@@ -12,7 +12,8 @@ $sql = "SELECT name FROM categories";
 $result = mysqli_query($link, $sql);
 
 if (!isset($_GET['id'])) {//проверяем на наличие ID
-header("Location: /404.php");
+    header("Location: /404.php");
+    die();
 }
 else {
     if ($result) {

@@ -10,6 +10,7 @@ $sql = "SELECT id, name FROM categories";
 $result = mysqli_query($link, $sql);
 if (!$link) {
     header("Location: /404.php");
+    die();
 } else {
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);

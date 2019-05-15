@@ -5,12 +5,12 @@ require_once("link.php");
 
 $categories = [];
 $content = "";
-$tpl_data = [];
 
 $sql = "SELECT id, name FROM categories";
 $result = mysqli_query($link, $sql);
 if (!$link) {
     header("Location: /404.php");
+    die();
 } else {
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -32,6 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $page_content = include_template("sign-up.php", ["categories" => $categories, "errors" => $errors, "form" => $form]);
         }
     }
+    if (filter_var($form["email"], FILTER_VALIDATE_EMAIL) === false) {
+        $errors["email"] = "Email введен неверно";
+    }
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $form["email"]);
         $sql = "SELECT id FROM user WHERE email = '$email'";
@@ -49,14 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         if ($res && empty($errors)) {
             header("Location: /login.php");
-            exit();
+            die();
         }
     }
-/*    $tpl_data['errors'] = $errors;
-    $tpl_data['values'] = $form;*/
 }
-
-/*$page_content = include_template('sign-up.php', [$tpl_data, "categories" => $categories]);*/
 
 $sign_up_content = include_template("layout.php", [
     "categories" => $categories,
