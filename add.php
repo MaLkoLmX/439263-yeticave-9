@@ -11,6 +11,7 @@ $sql = "SELECT id, name FROM categories";
 $result = mysqli_query($link, $sql);
 if (!$link) {
     header("Location: /404.php");
+    die();
 } else {
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -72,13 +73,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             "dict" => $dict
         ]);
     } else {
-        $sql = "INSERT INTO lots (title, description, price, date_finish, step_price, id_category, image, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+        $sql = "INSERT INTO lot (title, description, price, date_finish, step_price, id_category, image, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
         $stmt = db_get_prepare_stmt($link, $sql, [$lot["title"], $lot["description"], $lot["price"], $lot["date_finish"], $lot["step_price"], $lot["id_category"], $lot["image"]]);
         $res = mysqli_stmt_execute($stmt);
 
         if ($res) {
             $lot_id = mysqli_insert_id($link);
             header("Location: lot.php?id=" . $lot_id);
+            die();
         } else {
             $content = include_template("error.php", ["error" => mysqli_error($link)]);
         }
