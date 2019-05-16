@@ -41,7 +41,7 @@ function get_unixtime ($time) {
 
 function get_time ($time) {
     $date = strtotime($time);
-    $format_time = date("H:i:s", $time);
+    $format_time = date("H:i:s", $date);
 
     return $format_time;
 }

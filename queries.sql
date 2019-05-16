@@ -58,11 +58,11 @@ INSERT INTO lot (date_creation, name, description, image, price, date_finish, st
       "Легкий маневренный сноуборд, готовый дать жару в любом парке, растопив снег мощным щелчкоми четкими дугами",
       "img/lot-4.jpg",
       10999,
-      "2019-04-23 21:22",
+      "2019-06-23 21:22",
       1000,
-      2,
-      4,
-      2
+      1,
+      6,
+      4
     ),
     (
       "2019-02-24 16:41",
@@ -72,9 +72,9 @@ INSERT INTO lot (date_creation, name, description, image, price, date_finish, st
       7500,
       "2020-03-15 15:30",
       1000,
-      1,
-      6,
-      4
+      2,
+      4,
+      2
     ),
     (
       "2019-04-14 14:23",
@@ -91,31 +91,31 @@ INSERT INTO lot (date_creation, name, description, image, price, date_finish, st
 
 /*Добавили ставки*/
 INSERT INTO rate (date_rate, amount, id_user, id_lot) VALUES
-    ("2019-04-23 21:22", 32000, 1, 1),
-    ("2019-04-23 22:54", 7500, 1, 2),
-    ("2019-04-23 17:04", 27500, 2, 1),
-    ("2019-04-24 14:11", 9999, 1, 3);
+    ("2019-06-15 21:22", 32000, 1, 1),
+    ("2019-05-12 22:54", 7500, 1, 2),
+    ("2019-05-23 17:04", 27500, 2, 1),
+    ("2019-05-24 14:11", 9999, 1, 3);
 
 /*получить все категории*/
-SELECT * FROM categories;
+/*SELECT * FROM categories;*/
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, цену, название категории*/
-SELECT l.name, price, image, MAX(r.amount), c.name FROM lot l
+/*SELECT l.id as id_lot, l.name, price, image, c.name as categories, MAX(r.amount), date_finish FROM lot l
 JOIN categories c ON l.id_category = c.id
-JOIN rate r ON r.id_lot = l.id
-WHERE date_finish < NOW()
-GROUP BY r.id_lot ORDER BY date_creation DESC;
+LEFT OUTER JOIN rate r ON r.id_lot = l.id
+WHERE date_finish > NOW()
+GROUP BY r.id_lot ORDER BY date_creation DESC LIMIT 6;*/
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
-SELECT l.name, description, image, price, c.name FROM lot l
+/*SELECT l.name, description, image, price, c.name FROM lot l
 JOIN categories c ON l.id_category = c.id
-WHERE l.id = 1;
+WHERE l.id = 1;*/
 
 /*обновить название лота по его идентификатору*/
-UPDATE lot SET name = "Да" WHERE id = 3;
+/*UPDATE lot SET name = "Да" WHERE id = 3;*/
 
 /*получить список самых свежих ставок для лота по его идентификатору*/
-SELECT date_rate, amount FROM lot l
+/*SELECT date_rate, amount FROM lot l
 JOIN rate r ON l.id = r.id_lot
 WHERE l.id = 1
-ORDER BY date_rate DESC;
+ORDER BY date_rate DESC;*/

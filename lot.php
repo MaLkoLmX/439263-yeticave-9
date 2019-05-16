@@ -3,6 +3,12 @@ require_once("helpers.php");
 require_once("functions.php");
 require_once("link.php");
 
+session_start();
+
+if ($_SESSION) {
+    $user = $_SESSION["user"]["name"];
+}
+
 $categories = [];
 $lots = [];
 $content = "";
@@ -12,7 +18,8 @@ $sql = "SELECT name FROM categories";
 $result = mysqli_query($link, $sql);
 
 if (!isset($_GET['id'])) {//проверяем на наличие ID
-    header("Location: /404.php");
+    http_response_code(404);
+    $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
     die();
 }
 else {
@@ -47,8 +54,7 @@ $page_content = include_template("lot.php", [
 $lots_content = include_template("layout.php", [
     "categories" => $categories,
     "content" => $page_content,
-    "is_auth" => $is_auth,
-    "user_name" => $user_name,
+    "user_name" => $user,
     "title" => "Лот"
 ]);
 

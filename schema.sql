@@ -37,7 +37,7 @@ CREATE TABLE user (
   date_reg TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   email CHAR(30) UNIQUE,
   name CHAR(60) UNIQUE,
-  password CHAR(30),
+  password CHAR(60),
   avatar CHAR(128),
   contact CHAR(255)
 );
