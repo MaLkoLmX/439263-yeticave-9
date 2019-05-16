@@ -3,18 +3,20 @@ require_once("helpers.php");
 require_once("functions.php");
 require_once("link.php");
 
+session_start();
+
 $categories = [];
 $content = "";
 
 $sql = "SELECT id, name FROM categories";
 $result = mysqli_query($link, $sql);
 if (!$link) {
-    header("Location: /404.php");
-    die();
+    http_response_code(404);
+    $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
 } else {
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $page_content = include_template("sign-up.php", ["categories" => $categories]);
+        $content = include_template("sign-up.php", ["categories" => $categories]);
     } else {
         $error = mysqli_error($link);
         $content = include_template("404.html", ["error" => $error]);
@@ -29,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     foreach ($req_fields as $field) {
       if (empty($form[$field])) {
           $errors[$field] = "Это поле надо заполнить " . $field;
-          $page_content = include_template("sign-up.php", ["categories" => $categories, "errors" => $errors, "form" => $form]);
+          $content = include_template("sign-up.php", ["categories" => $categories, "errors" => $errors, "form" => $form]);
         }
     }
     if (filter_var($form["email"], FILTER_VALIDATE_EMAIL) === false) {
@@ -42,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (mysqli_num_rows($res) > 0) {
             $errors[] = "Пользователь с этим email уже зарегистрирован";
-            $page_content = include_template("sign-up.php", ["categories" => $categories, "errors" => $errors, "form" => $form]);
+            $content = include_template("sign-up.php", ["categories" => $categories, "errors" => $errors, "form" => $form]);
         } else {
           $password = password_hash($form["password"], PASSWORD_DEFAULT);
 
@@ -59,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $sign_up_content = include_template("layout.php", [
     "categories" => $categories,
-    "content" => $page_content,
+    "content" => $content,
     "is_auth" => $is_auth,
     "user_name" => $user_name,
     "title" => "Регистрация"

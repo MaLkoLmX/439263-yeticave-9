@@ -21,7 +21,7 @@
       <select id="category" name="category">
         <option>Выберите категорию</option>
         <?php foreach ($categories as $key => $item): ?>
-        <option value="<?=$item["id"];?>" <?=$lot["lot-cat"] == $item["id"] ? "selected" : "";?>><?=$item["name"];?></option>
+        <option value="<?=$item["name"];?>" <?=$lot["lot-cat"] == $item["id"] ? "selected" : "";?>><?=$item["name"];?></option>
         <?php endforeach;?>
       </select>
       <span class="form__error"><?=isset($errors["lot-cat"]) ? $errors["lot-cat"] : "";?></span>
@@ -32,10 +32,10 @@
     <textarea id="message" name="message" placeholder="Напишите описание лота"></textarea>
     <span class="form__error">Напишите описание лота</span>
   </div>
-  <div class="form__item form__item--file <?=isset($errors["lot_image"]) ? "form__item--invalid" : "";?>">
+  <div class="form__item form__item--file <?=isset($errors["image"]) ? "form__item--invalid" : "";?>">
     <label>Изображение <sup>*</sup></label>
     <div class="form__input-file">
-      <input class="visually-hidden" type="file" id="lot-img" value="">
+      <input class="visually-hidden" type="file" id="lot-img" name="image" value="">
       <label for="lot-img">
         Добавить
       </label>

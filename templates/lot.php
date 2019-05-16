@@ -20,6 +20,7 @@
       <p class="lot-item__description"><?=$item["description"];?></p>
     </div>
     <div class="lot-item__right">
+      <?php if (isset($_SESSION["user"])):?>
       <div class="lot-item__state">
 
         <?php if (get_unixtime (get_time($item["date_finish"])) <= get_unixtime ("1:00")):?>
@@ -105,5 +106,6 @@
         </table>
       </div>
     </div>
+    <?php endif;?>
   </div>
 </section>
