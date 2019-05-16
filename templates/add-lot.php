@@ -7,7 +7,7 @@
     <?php endforeach;?>
   </ul>
 </nav>
-<form class="form form--add-lot container <?=isset($errors) ? "form--invalid" : "";?>" action="add.php" method="post"> <!-- form--invalid -->
+<form class="form form--add-lot container <?=isset($errors) ? "form--invalid" : "";?>" action="add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
   <h2>Добавление лота</h2>
   <div class="form__container-two">
     <div class="form__item <?=isset($errors["lot-name"]) ? "form__item--invalid" : "";?>"> <!-- form__item--invalid -->
@@ -57,7 +57,7 @@
     <div class="form__item <?=isset($errors["lot-date"]) ? "form__item--invalid" : "";?>">
       <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
       <?php $value = isset($lot["lot-date"]) ? $lot["lot-date"] : ""?>
-      <input class="form__input-date" id="lot-date" type="text" name="lot-date" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+      <input class="form__input-date" id="lot-date" type="text" name="lot-date" placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?php if (isset($lot['lot-date'])) print $lot['lot-date']?>">
       <span class="form__error"><?= isset($errors["lot-date"]) ? $errors["lot-date"] : "";?></span>
     </div>
   </div>

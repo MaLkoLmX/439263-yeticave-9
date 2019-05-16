@@ -19,6 +19,7 @@ if (!$link) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
         $page_content = include_template("add-lot.php", ["categories" => $categories]);
     } else {
+        http_response_code(404);
         $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
     }
 }
@@ -29,7 +30,7 @@ if ($_SESSION) {
 
 if (isset($_SESSION["user"])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $lot = $_POST;
+        $lots = $_POST;
         $required = ["lot-name", "message", "lot-rate", "lot-step", "lot-date, lot-cat"];
         $dict = ["lot-name" => "Название", "message" => "Описание товара", "lot-rate" => "Стартовая цена", "lot-step" => "Ставка", "lot-date" => "Дата окончания лота", "lot_image" => "Фото тоавра", "lot-cat" => "Категория товара"];
         $errors = [];
@@ -48,24 +49,24 @@ if (isset($_SESSION["user"])) {
         if (empty($errors) && !strtotime($_POST["lot-date"]) < (strtotime("today") + 86400)) {
             $errors["lot-date"] = "Укажите дату окончания не раньше, чем через 24 часа";
         }
-        if (empty($errors) && !is_int($_POST["lot-rate"]) && $_POST["lot-rate"] >= 0) {
+        if (!empty($errors) && !is_int($_POST["lot-rate"]) && $_POST["lot-rate"] <= 0) {
             $errors["lot-rate"] = "Введите целое число больше ноля";
         }
-        if (empty($errors) && !is_int($_POST["lot-step"]) && $_POST["lot-step"] >= 0) {
+        if (!empty($errors) && !is_int($_POST["lot-step"]) && $_POST["lot-step"] <= 0) {
             $errors["lot-step"] = "Введите целое число больше ноля";
         }
 
         if ($_FILES["image"]["error"] = 0) {
             $tmp_name = $_FILES["image"]["tmp_name"];
-            /*$path = $_FILES["lot_image"]["name"];*/
+            $path = uniqid() . $_FILES["image"]["name"];
 
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_type = finfo_file($finfo, $tmp_name);
             if ($file_type !== "image/png" && $file_type !== "image/jpeg") {
                 $errors["image"] = "Загрузите картинку в другом формате";
             }   else {
-                move_uploaded_file($tmp_name, "uploads/" . uniqid());
-                $lot["image"] = "uploads/" . uniqid();
+                move_uploaded_file($tmp_name, "uploads/" . $path);
+                $lots["image"] = "uploads/" . $path;
             }
         } else {
             $errors["image"] = "Вы не загрузили файл";
@@ -74,13 +75,13 @@ if (isset($_SESSION["user"])) {
         if (count($errors)) {
             $page_content = include_template("add-lot.php", [
                 "categories" => $categories,
-                "lot" => $lot,
+                "lot" => $lots,
                 "errors" => $errors,
                 "dict" => $dict
             ]);
         } else {
             $sql = "INSERT INTO lot (title, description, price, date_finish, step_price, id_category, image, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
-            $stmt = db_get_prepare_stmt($link, $sql, [$lot["title"], $lot["description"], $lot["price"], $lot["date_finish"], $lot["step_price"], $lot["id_category"], $lot["image"]]);
+            $stmt = db_get_prepare_stmt($link, $sql, [$lots["title"], $lots["description"], $lots["price"], $lots["date_finish"], $lots["step_price"], $lots["id_category"], $lots["image"]]);
             $res = mysqli_stmt_execute($stmt);
 
             if ($res) {

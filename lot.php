@@ -20,7 +20,6 @@ $result = mysqli_query($link, $sql);
 if (!isset($_GET['id'])) {//проверяем на наличие ID
     http_response_code(404);
     $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
-    die();
 }
 else {
     if ($result) {
