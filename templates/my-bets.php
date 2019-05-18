@@ -25,7 +25,7 @@
         <div class="timer timer--finishing"><?=$item["date_finish"];?></div>
       </td>
       <td class="rates__price">
-        <?=get_price($item["price"]);?>
+        <?=get_price($item["amount"]);?>
       </td>
       <td class="rates__time">
         <?=$item["date_create"];?>

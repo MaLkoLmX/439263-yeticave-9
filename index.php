@@ -30,7 +30,7 @@ $sql = "SELECT l.id as id_lot, l.name, price, image, MAX(c.name) as categories, 
         JOIN categories c ON l.id_category = c.id
         LEFT OUTER JOIN rate r ON r.id_lot = l.id
         WHERE date_finish > NOW()
-        GROUP BY r.id_lot ORDER BY l.date_creation DESC LIMIT 6";
+        GROUP BY l.id ORDER BY l.date_creation DESC LIMIT 6";
 
 if ($res = mysqli_query($link, $sql)) {
     $products = mysqli_fetch_all($res, MYSQLI_ASSOC);

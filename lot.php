@@ -13,7 +13,8 @@ $categories = [];
 $lots = [];
 $content = "";
 
-$id = (int) $_GET['id'];
+$id = (int) $_GET["id"];
+$id_user = $user["id"];
 $sql = "SELECT name FROM categories";
 $result = mysqli_query($link, $sql);
 
@@ -31,7 +32,7 @@ if (!isset($_GET['id'])) {//проверяем на наличие ID
 
 $sql = "SELECT l.id as id_lot, l.name as title, description, price, step_price, image, c.name as categories, MAX(r.amount) as rate_price, date_finish FROM lot l
     JOIN categories c ON l.id_category = c.id
-    JOIN rate r ON r.id_lot = l.id
+    LEFT OUTER JOIN rate r ON r.id_lot = l.id
     WHERE l.id = $id
     GROUP BY r.id_lot ORDER BY date_creation DESC LIMIT 6";
 
@@ -69,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ]);
     } else {
         $sql = "INSERT INTO rate (date_rate, amount, id_user, id_lot) VALUES (NOW(), ?, ?, ?)";
-        $stmt = db_get_prepare_stmt($link, $sql, [$form['rate'], $user['id'], $id]);
+        $stmt = db_get_prepare_stmt($link, $sql, [$form['rate'], $id_user, $id]);
         $res = mysqli_stmt_execute($stmt);
 
         if ($res) { //елси верно - обновляем страницу
