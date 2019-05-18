@@ -6,7 +6,7 @@ require_once("link.php");
 session_start();
 
 if ($_SESSION) {
-    $user = $_SESSION["user"]["name"];
+    $user = $_SESSION["user"];
 }
 
 $categories = [];
@@ -20,12 +20,10 @@ $result = mysqli_query($link, $sql);
 if (!isset($_GET['id'])) {//проверяем на наличие ID
     http_response_code(404);
     $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
-}
-else {
+} else {
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-    else {
+    } else {
         $error = mysqli_error($link);
         $content = include_template("404.html", ["error" => $error]);
     }
@@ -40,9 +38,42 @@ $sql = "SELECT l.id as id_lot, l.name as title, description,  price, step_price,
 if ($result_lot = mysqli_query($link, $sql)) {
     $lots = mysqli_fetch_all($result_lot, MYSQLI_ASSOC);
     $content = include_template("lot.php", ["lots" => $lots]);
-}
-else {
+} else {
     $content = include_template("404.html", ["error" => $error]);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $form = $_POST;
+    $required = ["rate"];
+    $errors = [];
+
+    if (empty($form["rate"])) {
+        $errors[$key] = "Эти поля надо заполнить " . $key;
+        $content = include_template("lot.php", ["categories" => $categories, "errors" => $errors, "form" => $form]);
+    }
+
+    if (!empty($errors) && !is_int($form["rate"]) && $form["rate"] <= 0) {
+        $errors["rate"] = "Введите целое число больше ноля";
+    }
+
+    if (count($errors)) {
+        $page_content = include_template("lot.php", [
+            "categories" => $categories,
+            "lots" => $lots,
+            "errors" => $errors,
+        ]);
+    } else {
+        $sql = "INSERT INTO rate (date_rate, amount, id_user, id_lot) VALUES (NOW(), ?, ?, ?)";
+        $stmt = db_get_prepare_stmt($link, $sql, [$form['rate'], $user['id'], $id]);
+        $res = mysqli_stmt_execute($stmt);
+
+        if ($res) { //елси верно - обновляем страницу
+            header("Refresh: 0");
+            die();
+        } else {
+            $page_content = include_template("error.php", ["error" => mysqli_error($link)]);
+        }
+    }
 }
 
 $page_content = include_template("lot.php", [
@@ -53,7 +84,7 @@ $page_content = include_template("lot.php", [
 $lots_content = include_template("layout.php", [
     "categories" => $categories,
     "content" => $page_content,
-    "user_name" => $user,
+    "user_name" => $user["name"],
     "title" => "Лот"
 ]);
 

@@ -25,14 +25,14 @@ if (!$link) {
 }
 
 if ($_SESSION) {
-    $user = $_SESSION["user"]["name"];
+    $user = $_SESSION["user"];
 }
 
 if (isset($_SESSION["user"])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $lots = $_POST;
-        $required = ["lot-name", "message", "lot-rate", "lot-step", "lot-date, lot-cat"];
-        $dict = ["lot-name" => "Название", "message" => "Описание товара", "lot-rate" => "Стартовая цена", "lot-step" => "Ставка", "lot-date" => "Дата окончания лота", "lot_image" => "Фото тоавра", "lot-cat" => "Категория товара"];
+        $required = ["name", "description", "price", "step_price", "date_finish", "category"];
+        $dict = ["name" => "Название", "description" => "Описание товара", "price" => "Стартовая цена", "step_price" => "Ставка", "date_finish" => "Дата окончания лота", "lot_image" => "Фото тоавра", "category" => "Категория товара"];
         $errors = [];
 
         foreach ($required as $key) {
@@ -40,23 +40,23 @@ if (isset($_SESSION["user"])) {
                 $errors[$key] = "Эти поля надо заполнить " . $key;
             }
         }
-        if (empty($errors) && $_POST["lot-cat"] == "Выберите категорию") {
-            $errors["lot-cat"] = "Категория не выбрана";
+        if (empty($errors) && $_POST["category"] == "Выберите категорию") {
+            $errors["category"] = "Категория не выбрана";
         }
-        if (empty($errors) && !is_date_valid($_POST["lot-date"])) {
-            $errors["lot-date"] = "Неправильный формат даты";
+        if (empty($errors) && !is_date_valid($_POST["date_finish"])) {
+            $errors["date_finish"] = "Неправильный формат даты";
         }
-        if (empty($errors) && !strtotime($_POST["lot-date"]) < (strtotime("today") + 86400)) {
-            $errors["lot-date"] = "Укажите дату окончания не раньше, чем через 24 часа";
+        if (empty($errors) && strtotime($_POST["date_finish"]) < (strtotime("today") + 86400)) {
+            $errors["date_finish"] = "Укажите дату окончания не раньше, чем через 24 часа";
         }
-        if (!empty($errors) && !is_int($_POST["lot-rate"]) && $_POST["lot-rate"] <= 0) {
-            $errors["lot-rate"] = "Введите целое число больше ноля";
+        if (!empty($errors) && !is_int($_POST["price"]) && $_POST["price"] <= 0) {
+            $errors["price"] = "Введите целое число больше ноля";
         }
-        if (!empty($errors) && !is_int($_POST["lot-step"]) && $_POST["lot-step"] <= 0) {
-            $errors["lot-step"] = "Введите целое число больше ноля";
+        if (!empty($errors) && !is_int($_POST["step_price"]) && $_POST["step_price"] <= 0) {
+            $errors["step_price"] = "Введите целое число больше ноля";
         }
 
-        if ($_FILES["image"]["error"] = 0) {
+        if ($_FILES["image"]["error"] == 0) {
             $tmp_name = $_FILES["image"]["tmp_name"];
             $path = uniqid() . $_FILES["image"]["name"];
 
@@ -75,13 +75,14 @@ if (isset($_SESSION["user"])) {
         if (count($errors)) {
             $page_content = include_template("add-lot.php", [
                 "categories" => $categories,
-                "lot" => $lots,
+                "lots" => $lots,
                 "errors" => $errors,
                 "dict" => $dict
             ]);
         } else {
-            $sql = "INSERT INTO lot (title, description, price, date_finish, step_price, id_category, image, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
-            $stmt = db_get_prepare_stmt($link, $sql, [$lots["title"], $lots["description"], $lots["price"], $lots["date_finish"], $lots["step_price"], $lots["id_category"], $lots["image"]]);
+            $lots["id_user"] = $user["id"];
+            $sql = "INSERT INTO lot (name, description, price, date_finish, step_price, id_category, image, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = db_get_prepare_stmt($link, $sql, [$lots["name"], $lots["category"], $lots["description"], $lots["price"], $lots["date_finish"], $lots["step_price"], $lots["id_category"], $lots["image"], $lots["id_user"]]);
             $res = mysqli_stmt_execute($stmt);
 
             if ($res) {
