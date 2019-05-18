@@ -29,7 +29,7 @@ if (!isset($_GET['id'])) {//проверяем на наличие ID
     }
 }
 
-$sql = "SELECT l.id as id_lot, l.name as title, description,  price, step_price, image, c.name as categories, MAX(r.amount), date_finish FROM lot l
+$sql = "SELECT l.id as id_lot, l.name as title, description, price, step_price, image, c.name as categories, MAX(r.amount) as rate_price, date_finish FROM lot l
     JOIN categories c ON l.id_category = c.id
     JOIN rate r ON r.id_lot = l.id
     WHERE l.id = $id
@@ -42,7 +42,10 @@ if ($result_lot = mysqli_query($link, $sql)) {
     $content = include_template("404.html", ["error" => $error]);
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$current_price = $lots[0]["rate_price"] ?? $lots["price"]; // сумма равная ставке или заданной цене
+$min_price = $current_price + $lots["rate_price"]; // Получили минимальную ставку
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $form = $_POST;
     $required = ["rate"];
     $errors = [];
@@ -51,9 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors[$key] = "Эти поля надо заполнить " . $key;
         $content = include_template("lot.php", ["categories" => $categories, "errors" => $errors, "form" => $form]);
     }
-
     if (!empty($errors) && !is_int($form["rate"]) && $form["rate"] <= 0) {
         $errors["rate"] = "Введите целое число больше ноля";
+    }
+    if (!empty($errors) && $form["rate"] < $min_price) {
+        $errors["rate"] = "Введите сумму больше минимальной ставки";
     }
 
     if (count($errors)) {

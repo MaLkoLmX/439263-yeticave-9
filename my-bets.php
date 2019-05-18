@@ -27,8 +27,8 @@ if (!$link) {
     }
 }
 
-$sql = "SELECT l.image as image, l.name as name, u.contact as contact, c.name as category, l.date_finish as date_finish, l.price as price, r.date_rate as date_create FROM lot l
-        LEFT OUTER JOIN rate r ON l.id = r.id_lot
+$sql = "SELECT l.image as image, l.name as name, u.contact as contact, c.name as category, l.date_finish as date_finish, l.price as price, r.date_rate as date_create FROM rate r
+        LEFT OUTER JOIN lot l ON l.id = r.id_lot
         LEFT OUTER JOIN user u ON l.id_winner = u.id
         JOIN categories c ON r.id_lot = c.id
         WHERE r.id_user = $id
