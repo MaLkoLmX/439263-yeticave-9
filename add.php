@@ -81,8 +81,8 @@ if (isset($_SESSION["user"])) {
             ]);
         } else {
             $lots["id_user"] = $user["id"];
-            $sql = "INSERT INTO lot (name, description, price, date_finish, step_price, id_category, image, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = db_get_prepare_stmt($link, $sql, [$lots["name"], $lots["category"], $lots["description"], $lots["price"], $lots["date_finish"], $lots["step_price"], $lots["id_category"], $lots["image"], $lots["id_user"]]);
+            $sql = "INSERT INTO lot (date_creation, name, description, image, price, date_finish, step_price, id_user, id_category) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = db_get_prepare_stmt($link, $sql, [$lots["name"], $lots["description"], $lots["image"], $lots["price"], $lots["date_finish"], $lots["step_price"], $lots["id_user"], $lots["category"]]);
             $res = mysqli_stmt_execute($stmt);
 
             if ($res) {

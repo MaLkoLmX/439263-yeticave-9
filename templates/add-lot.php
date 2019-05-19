@@ -12,7 +12,7 @@
   <div class="form__container-two">
     <div class="form__item <?=isset($errors["name"]) ? "form__item--invalid" : "";?>"> <!-- form__item--invalid -->
       <label for="name">Наименование <sup>*</sup></label>
-      <input id="name" type="text" name="name" placeholder="Введите наименование лота" value="<?php $value = isset($lots["name"]) ? $lots["name"] : ""?>">
+      <input id="name" type="text" name="name" placeholder="Введите наименование лота" value="<?php if (isset($lots["name"])) echo $lots["name"]?>">
       <span class="form__error"><?=isset($errors["name"]) ? $errors["name"] : "";?></span>
     </div>
     <div class="form__item <?=isset($errors["category"]) ? "form__item--invalid" : "";?>">
