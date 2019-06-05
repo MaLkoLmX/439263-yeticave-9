@@ -1,5 +1,11 @@
 <?php
-// функция для получения цены товара
+/**
+ * Округляет число и добовляет знак ₽
+ *
+ * @param $price число
+ *
+ * @return цена
+ */
 function get_price($price)
 {
     $price_ceil = ceil($price);
@@ -13,7 +19,13 @@ function get_price($price)
     }
 }
 
-// функция для форматирования ткеста и защиты от хакерских атак
+/**
+ * Удаляет теги из текста
+ *
+ * @param $str текст
+ *
+ * @return $text текст без тегов
+ */
 function esc($str)
 {
     $text = htmlspecialchars($str);
@@ -21,27 +33,27 @@ function esc($str)
     return $text;
 }
 
-// функция для получения времени до окончания показа лота
-function get_time_to_end($time)
-{
-    $now_time = time();
-    $mid_time = strtotime($time);
-    $dif_time = $mid_time - $now_time;
-    $hours = floor($dif_time / 3600);
-    $minutes = floor(($dif_time % 3600) / 60);
-    $format_time = $hours . ":" . $minutes;
-
-    return $format_time;
-}
-
-// функция для перевода времени в unixtime
+/**
+ * Переводит время в секунды
+ *
+ * @param $time время из бд
+ *
+ * @return $unix_time время в секундах
+ */
 function get_unixtime($time)
 {
     $unix_time = strtotime($time);
 
-    return ($unix_time);
+    return $unix_time;
 }
 
+/**
+ * Получает время в нужном формате
+ *
+ * @param $time время полученное из бд
+ *
+ * @return $format_time время в формате h:m
+ */
 function get_time(string $time)
 {
     $date_end = strtotime($time);
@@ -52,6 +64,13 @@ function get_time(string $time)
     return $hours . " : " . $minutes;
 }
 
+/**
+ * Получает время начала ставки и возвращает корректную форму множественного числа
+ *
+ * @param $date время полученное из бд
+ *
+ * @return $date время в нужном формате
+ */
 function date_bets($date)
 {
     $date = strtotime($date);
@@ -76,5 +95,4 @@ function date_bets($date)
 
     return $date;
 }
-
 ?>
