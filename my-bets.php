@@ -23,7 +23,8 @@ if (!$link) {
         $page_content = include_template("add-lot.php", ["categories" => $categories]);
     } else {
         http_response_code(404);
-        $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
+        $page_content = include_template("error.php",
+            ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
     }
 }
 
@@ -38,7 +39,8 @@ if ($result = mysqli_query($link, $sql)) {
     $rate = mysqli_fetch_all($result, MYSQLI_ASSOC);
 } else {
     http_response_code(404);
-    $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
+    $page_content = include_template("error.php",
+        ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
 }
 
 $page_content = include_template("my-bets.php", [

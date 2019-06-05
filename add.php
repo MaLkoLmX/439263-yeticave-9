@@ -20,7 +20,8 @@ if (!$link) {
         $page_content = include_template("add-lot.php", ["categories" => $categories]);
     } else {
         http_response_code(404);
-        $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
+        $page_content = include_template("error.php",
+            ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
     }
 }
 
@@ -32,7 +33,15 @@ if (isset($_SESSION["user"])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $lots = $_POST;
         $required = ["name", "description", "price", "step_price", "date_finish", "category"];
-        $dict = ["name" => "Название", "description" => "Описание товара", "price" => "Стартовая цена", "step_price" => "Ставка", "date_finish" => "Дата окончания лота", "lot_image" => "Фото тоавра", "category" => "Категория товара"];
+        $dict = [
+            "name" => "Название",
+            "description" => "Описание товара",
+            "price" => "Стартовая цена",
+            "step_price" => "Ставка",
+            "date_finish" => "Дата окончания лота",
+            "lot_image" => "Фото тоавра",
+            "category" => "Категория товара"
+        ];
         $errors = [];
 
         foreach ($required as $key) {
@@ -64,7 +73,7 @@ if (isset($_SESSION["user"])) {
             $file_type = finfo_file($finfo, $tmp_name);
             if ($file_type !== "image/png" && $file_type !== "image/jpeg") {
                 $errors["image"] = "Загрузите картинку в другом формате";
-            }   else {
+            } else {
                 move_uploaded_file($tmp_name, "uploads/" . $path);
                 $lots["image"] = "uploads/" . $path;
             }
@@ -82,7 +91,16 @@ if (isset($_SESSION["user"])) {
         } else {
             $lots["id_user"] = $user["id"];
             $sql = "INSERT INTO lot (date_creation, name, description, image, price, date_finish, step_price, id_user, id_category) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = db_get_prepare_stmt($link, $sql, [$lots["name"], $lots["description"], $lots["image"], $lots["price"], $lots["date_finish"], $lots["step_price"], $lots["id_user"], $lots["category"]]);
+            $stmt = db_get_prepare_stmt($link, $sql, [
+                $lots["name"],
+                $lots["description"],
+                $lots["image"],
+                $lots["price"],
+                $lots["date_finish"],
+                $lots["step_price"],
+                $lots["id_user"],
+                $lots["category"]
+            ]);
             $res = mysqli_stmt_execute($stmt);
 
             if ($res) {
@@ -99,7 +117,8 @@ if (isset($_SESSION["user"])) {
     }
 } else {
     http_response_code(403);
-    $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 403", "error" => "Пожалуйста авторизуйтесь"]);
+    $page_content = include_template("error.php",
+        ["categories" => $categories, "error_title" => "Ошибка 403", "error" => "Пожалуйста авторизуйтесь"]);
 }
 
 
@@ -110,6 +129,5 @@ $add_content = include_template("layout.php", [
     "title" => "Добавить лот"
 ]);
 
-print_r($errors);
 print($add_content);
 ?>

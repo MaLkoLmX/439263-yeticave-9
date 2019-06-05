@@ -16,7 +16,8 @@ $sql = "SELECT id, name FROM categories";
 $result = mysqli_query($link, $sql);
 if (!$link) {
     http_response_code(404);
-    $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
+    $page_content = include_template("error.php",
+        ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
 } else {
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -36,7 +37,7 @@ if (!$link) {
 
         $cur_page = $_GET["page"] ?? 1;
         $page_items = 6;
-        $sql ="SELECT COUNT(*) as cnt FROM lot WHERE MATCH(name, description) AGAINST(?)";
+        $sql = "SELECT COUNT(*) as cnt FROM lot WHERE MATCH(name, description) AGAINST(?)";
         $stmt = db_get_prepare_stmt($link, $sql, [$search]);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);

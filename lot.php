@@ -13,14 +13,15 @@ $categories = [];
 $lots = [];
 $content = "";
 
-$id = (int) $_GET["id"];
+$id = (int)$_GET["id"];
 $id_user = $user["id"];
 $sql = "SELECT name FROM categories";
 $result = mysqli_query($link, $sql);
 
 if (!isset($_GET["id"])) {//проверяем на наличие ID
     http_response_code(404);
-    $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
+    $page_content = include_template("error.php",
+        ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
 } else {
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);

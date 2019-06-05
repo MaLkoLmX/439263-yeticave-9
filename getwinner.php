@@ -59,8 +59,7 @@ if (!empty($lots)) {
 
             if ($result) {
                 print("Сообщение успешно отправлено");
-            }
-            else {
+            } else {
                 print("Не удалось отправить сообщение: " . $logger->dump());
             }
         }

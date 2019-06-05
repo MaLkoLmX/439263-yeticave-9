@@ -21,10 +21,10 @@ $result = mysqli_query($link, $sql);
 if ($result) {
     $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $content = include_template("content.php", ["categories" => $categories]);
-}
-else {
+} else {
     http_response_code(404);
-    $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
+    $page_content = include_template("error.php",
+        ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
 }
 
 /*Заполняем лот*/
@@ -37,8 +37,7 @@ $sql = "SELECT l.id as id_lot, l.name, price, image, MAX(c.name) as categories, 
 if ($res = mysqli_query($link, $sql)) {
     $products = mysqli_fetch_all($res, MYSQLI_ASSOC);
     $content = include_template("content.php", ["categories" => $categories, "products" => $products]);
-}
-else {
+} else {
     $content = include_template("404.html", ["error" => $error]);
 }
 

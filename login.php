@@ -18,7 +18,8 @@ if (!$link) {
         $page_content = include_template("login.php", ["categories" => $categories]);
     } else {
         http_response_code(404);
-        $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
+        $page_content = include_template("error.php",
+            ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
     }
 }
 
@@ -50,7 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (count($errors)) {
-        $page_content = include_template("login.php", ["form" => $form, "errors" => $errors, "categories" => $categories]);
+        $page_content = include_template("login.php",
+            ["form" => $form, "errors" => $errors, "categories" => $categories]);
     } else {
         header("Location: /index.php");
         die();
