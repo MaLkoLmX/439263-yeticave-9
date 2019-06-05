@@ -10,7 +10,6 @@
 <section class="lot-item container">
   <?php foreach ($lots as $key => $item):?>
   <h2><?=$item["title"];?></h2>
-  <?php endforeach;?>
   <div class="lot-item__content">
     <div class="lot-item__left">
       <div class="lot-item__image">
@@ -22,16 +21,9 @@
     <div class="lot-item__right">
       <?php if (isset($_SESSION["user"])):?>
       <div class="lot-item__state">
-
-        <?php if (get_unixtime (get_time($item["date_finish"])) <= get_unixtime ("1:00")):?>
-        <div class="lot-item__timer timer timer--finishing">
-        <?php else:?>
-        <div class="lot-item__timer timer">
-            <?=get_time($item["date_finish"]);?>
+        <div class="lot-item__timer timer <?=(get_time($item["date_finish"])) <= "01:00" ? "timer--finishing" : "";?>">
+          <?=get_time($item["date_finish"]);?>
         </div>
-        <?php endif;?>
-
-
         <div class="lot-item__cost-state">
           <div class="lot-item__rate">
             <span class="lot-item__amount">Текущая цена</span>
@@ -42,10 +34,10 @@
           </div>
         </div>
         <form class="lot-item__form" action="" method="post" autocomplete="off">
-          <p class="lot-item__form-item form__item <?=isset($errors["cost"]) ? "form__item--invalid" : "";?>">
+          <p class="lot-item__form-item form__item <?=isset($errors) ? "form__item--invalid" : "";?>">
             <label for="cost">Ваша ставка</label>
             <input id="cost" type="text" name="rate" placeholder="<?=$lots["price"]+$lots["step_price"];?>">
-            <span class="form__error">Введите наименование лота</span>
+            <span class="form__error"><?= isset($errors) ? $errors["rate"] : "";?></span>
           </p>
           <button type="submit" class="button">Сделать ставку</button>
         </form>
@@ -107,5 +99,6 @@
       </div>
     </div>
     <?php endif;?>
+  <?php endforeach;?>
   </div>
 </section>

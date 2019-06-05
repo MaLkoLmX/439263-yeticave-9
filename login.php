@@ -71,6 +71,5 @@ $login_content = include_template("layout.php", [
     "title" => "Войти",
 ]);
 
-print($user);
 print($login_content);
 ?>

@@ -13,6 +13,8 @@ if ($_SESSION) {
     $user = $_SESSION["user"]["name"];
 }
 
+require_once("getwinner.php");
+
 $sql = "SELECT name, code FROM categories";
 $result = mysqli_query($link, $sql);
 

@@ -56,7 +56,7 @@
     <div class="form__item <?=isset($errors["date_finish"]) ? "form__item--invalid" : "";?>">
       <label for="date_finish">Дата окончания торгов <sup>*</sup></label>
       <?php $value = isset($lots["date_finish"]) ? $lots["date_finish"] : ""?>
-      <input class="form__input-date" id="date_finish" type="text" name="date_finish" placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?php if (isset($lots['date_finish'])) print $lots['date_finish']?>">
+      <input class="form__input-date" id="date_finish" type="text" name="date_finish" placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?php if (isset($lots["date_finish"])) print $lots["date_finish"]?>">
       <span class="form__error"><?= isset($errors["date_finish"]) ? $errors["date_finish"] : "";?></span>
     </div>
   </div>

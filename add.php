@@ -110,5 +110,6 @@ $add_content = include_template("layout.php", [
     "title" => "Добавить лот"
 ]);
 
+print_r($errors);
 print($add_content);
 ?>

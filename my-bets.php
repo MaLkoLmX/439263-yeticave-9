@@ -27,10 +27,10 @@ if (!$link) {
     }
 }
 
-$sql = "SELECT l.image as image, l.name as name, u.contact as contact, c.name as category, l.date_finish as date_finish, l.price as price, r.date_rate as date_create, r.amount as amount FROM rate r
+$sql = "SELECT l.image as image, l.name as name, u.contact as contact, c.name as category, l.date_finish as date_finish, l.price as price, r.date_rate as date_create, r.amount as amount, r.id_lot as id_lot, l.id_winner as winner FROM rate r
         LEFT OUTER JOIN lot l ON l.id = r.id_lot
         LEFT OUTER JOIN user u ON l.id_winner = u.id
-        JOIN categories c ON r.id_lot = c.id
+        JOIN categories c ON l.id_category = c.id
         WHERE r.id_user = $id
         ORDER BY date_rate DESC";
 
