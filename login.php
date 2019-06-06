@@ -5,23 +5,6 @@ require_once("link.php");
 
 session_start();
 
-$categories = [];
-
-$sql = "SELECT id, name FROM categories";
-$result = mysqli_query($link, $sql);
-if (!$link) {
-    header("Location: /404.php");
-    die();
-} else {
-    if ($result) {
-        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $page_content = include_template("login.php", ["categories" => $categories]);
-    } else {
-        http_response_code(404);
-        $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
-    }
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $form = $_POST;
 
@@ -50,7 +33,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (count($errors)) {
-        $page_content = include_template("login.php", ["form" => $form, "errors" => $errors, "categories" => $categories]);
+        $page_content = include_template("login.php", [
+            "form" => $form,
+            "errors" => $errors,
+            "categories" => get_categories($link)
+        ]);
     } else {
         header("Location: /index.php");
         die();
@@ -60,17 +47,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: /index.php");
         die();
     } else {
-        $page_content = include_template("login.php", ["categories" => $categories]);
+        $page_content = include_template("login.php", [
+            "categories" => get_categories($link)
+        ]);
     }
 }
 
 $login_content = include_template("layout.php", [
-    "categories" => $categories,
+    "categories" => get_categories($link),
     "content" => $page_content,
     "user_name" => $user,
     "title" => "Войти",
 ]);
 
-print($user);
 print($login_content);
 ?>

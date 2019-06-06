@@ -5,20 +5,18 @@ require_once("link.php");
 
 session_start();
 
-if ($_SESSION) {
-    $user = $_SESSION["user"];
-}
 
 mysqli_query($link, "CREATE FULLTEXT INDEX lot_search ON lot(name, description)");
 
-$search = $_GET["search"] ?? "";
+$cat_id = $_GET["cat"] ?? "";
+$cat_name = $_GET["name"] ?? "";
 
-if ($search) {
+if ($cat_id) {
 
     $cur_page = $_GET["page"] ?? 1;
     $page_items = 6;
-    $sql = "SELECT COUNT(*) as cnt FROM lot WHERE MATCH(name, description) AGAINST(?)";
-    $stmt = db_get_prepare_stmt($link, $sql, [$search]);
+    $sql = "SELECT COUNT(*) as cnt FROM lot where id_category = (?)";
+    $stmt = db_get_prepare_stmt($link, $sql, [$cat_id]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $items_count = mysqli_fetch_assoc($result)["cnt"];
@@ -27,33 +25,33 @@ if ($search) {
     $pages = range(1, $pages_count);
 
     $sql = "SELECT l.name as name, l.id as id_lot, price, MAX(r.amount) as rate_price, image, MAX(c.name) as category, date_finish FROM lot l
-            JOIN categories c ON id_category = c.id
-            LEFT JOIN rate r ON r.id_lot = l.id
-            WHERE MATCH(l.name, description) AGAINST(?) and date_finish > NOW()
-            GROUP BY l.id ORDER BY date_creation LIMIT  $page_items OFFSET $offset";
+                JOIN categories c ON id_category = c.id
+                LEFT JOIN rate r ON r.id_lot = l.id
+                WHERE id_category = (?) and date_finish > NOW()
+                GROUP BY l.id ORDER BY date_creation LIMIT  $page_items OFFSET $offset";
 
-
-    $stmt = db_get_prepare_stmt($link, $sql, [$search]);
+    $stmt = db_get_prepare_stmt($link, $sql, [$cat_id]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-$page_content = include_template("search.php", [
+
+$page_content = include_template("all-lots.php", [
     "categories" => get_categories($link),
     "lots" => $lots,
-    "search" => $search,
+    "cat_id" => $cat_id,
+    "cat_name" => $cat_name,
     "pages" => $pages,
     "pages_count" => $pages_count,
     "cur_page" => $cur_page
 ]);
 
-$lots_content = include_template("layout.php", [
-    "categories" => get_categories($link),
+$layout_content = include_template("layout.php", [
     "content" => $page_content,
+    "categories" => get_categories($link),
     "user_name" => $user["name"],
-    "title" => "Лот"
+    "title" => "Все лоты"
 ]);
-
-print($lots_content);
+print($layout_content);
 ?>

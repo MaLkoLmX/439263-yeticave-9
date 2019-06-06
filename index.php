@@ -5,27 +5,8 @@ require_once("link.php");
 
 session_start();
 
-$categories = [];
-$products = [];
-$content = "";
+require_once("getwinner.php");
 
-if ($_SESSION) {
-    $user = $_SESSION["user"]["name"];
-}
-
-$sql = "SELECT name, code FROM categories";
-$result = mysqli_query($link, $sql);
-
-if ($result) {
-    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $content = include_template("content.php", ["categories" => $categories]);
-}
-else {
-    http_response_code(404);
-    $page_content = include_template("error.php", ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
-}
-
-/*Заполняем лот*/
 $sql = "SELECT l.id as id_lot, l.name, price, image, MAX(c.name) as categories, MAX(r.amount), l.date_finish FROM lot l
         JOIN categories c ON l.id_category = c.id
         LEFT OUTER JOIN rate r ON r.id_lot = l.id
@@ -34,14 +15,13 @@ $sql = "SELECT l.id as id_lot, l.name, price, image, MAX(c.name) as categories, 
 
 if ($res = mysqli_query($link, $sql)) {
     $products = mysqli_fetch_all($res, MYSQLI_ASSOC);
-    $content = include_template("content.php", ["categories" => $categories, "products" => $products]);
-}
-else {
+    $content = include_template("content.php", ["categories" => get_categories($link), "products" => $products]);
+} else {
     $content = include_template("404.html", ["error" => $error]);
 }
 
 $layout_content = include_template("layout.php", [
-    "categories" => $categories,
+    "categories" => get_categories($link),
     "content" => $content,
     "user_name" => $user,
     "title" => "Главная страница"

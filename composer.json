@@ -1,0 +1,9 @@
+{
+    "name": "vendor/yericave",
+    "description": "Staff for katki",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}
