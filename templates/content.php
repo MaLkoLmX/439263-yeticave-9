@@ -6,7 +6,8 @@
         <!--заполните этот список из массива категорий-->
         <?php foreach ($categories as $key => $item): ?>
             <li class="promo__item promo__item--<?= $item["code"]; ?>">
-                <a class="promo__link" href="pages/all-lots.html"><?= $item["name"]; ?></a>
+                <a class="promo__link"
+                   href="all-lots.php?cat=<?= $item["id"]; ?>&name=<?= $item["name"]; ?>"><?= esc($item["name"]); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -24,16 +25,17 @@
                     <img src="<?= $item["image"]; ?>" width="350" height="260" alt="<?= $item["name"]; ?>">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?= $item["categories"]; ?></span>
+                    <span class="lot__category"><?= esc($item["categories"]); ?></span>
                     <h3 class="lot__title"><a class="text-link"
-                                              href="/lot.php?id=<?= $item["id_lot"]; ?>"><?= $item["name"]; ?></a></h3>
+                                              href="/lot.php?id=<?= $item["id_lot"]; ?>"><?= esc($item["name"]); ?></a>
+                    </h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?= get_price($item["price"]); ?></span>
+                            <span class="lot__cost"><?= esc(get_price($item["price"])); ?></span>
                         </div>
                         <div class="lot-item__timer timer <?= (get_time($item["date_finish"])) <= "01:00" ? "timer--finishing" : ""; ?>">
-                            <?= get_time($item["date_finish"]); ?>
+                            <?= esc(get_time($item["date_finish"])); ?>
                         </div>
                     </div>
                 </div>

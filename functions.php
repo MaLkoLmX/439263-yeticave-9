@@ -95,4 +95,21 @@ function date_bets($date)
 
     return $date;
 }
+
+/**
+ * Получает массив категорий
+ *
+ * @param $link соединение
+ *
+ * @return $categories массив категорий
+ */
+function get_categories($link)
+{
+    $sql = "SELECT id, name, code FROM categories";
+    $result = mysqli_query($link, $sql);
+    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    return $categories;
+}
+
 ?>

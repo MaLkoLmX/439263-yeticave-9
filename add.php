@@ -5,28 +5,20 @@ require_once("link.php");
 
 session_start();
 
-$categories = [];
-$lots = [];
-$content = "";
 
 $sql = "SELECT id, name FROM categories";
 $result = mysqli_query($link, $sql);
-if (!$link) {
-    header("Location: /404.php");
-    die();
-} else {
-    if ($result) {
-        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $page_content = include_template("add-lot.php", ["categories" => $categories]);
-    } else {
-        http_response_code(404);
-        $page_content = include_template("error.php",
-            ["categories" => $categories, "error_title" => "Ошибка 404", "error" => "Страницы не найдена"]);
-    }
-}
 
-if ($_SESSION) {
-    $user = $_SESSION["user"];
+if ($result) {
+    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $page_content = include_template("add-lot.php", ["categories" => get_categories($link)]);
+} else {
+    http_response_code(404);
+    $page_content = include_template("error.php", [
+        "categories" => $categories,
+        "error_title" => "Ошибка 404",
+        "error" => "Страницы не найдена"
+    ]);
 }
 
 if (isset($_SESSION["user"])) {
@@ -42,26 +34,25 @@ if (isset($_SESSION["user"])) {
             "lot_image" => "Фото тоавра",
             "category" => "Категория товара"
         ];
-        $errors = [];
 
         foreach ($required as $key) {
-            if (empty($_POST[$key])) {
+            if (empty($lots[$key])) {
                 $errors[$key] = "Эти поля надо заполнить " . $key;
             }
         }
-        if (empty($errors) && $_POST["category"] == "Выберите категорию") {
+        if (empty($errors) && $lots["category"] > 6 || $lots["category"] < 1) {
             $errors["category"] = "Категория не выбрана";
         }
-        if (empty($errors) && !is_date_valid($_POST["date_finish"])) {
+        if (empty($errors) && !is_date_valid($lots["date_finish"])) {
             $errors["date_finish"] = "Неправильный формат даты";
         }
-        if (empty($errors) && strtotime($_POST["date_finish"]) < (strtotime("today") + 86400)) {
+        if (empty($errors) && strtotime($lots["date_finish"]) < (strtotime("today") + 86400)) {
             $errors["date_finish"] = "Укажите дату окончания не раньше, чем через 24 часа";
         }
-        if (!empty($errors) && !is_int($_POST["price"]) && $_POST["price"] <= 0) {
+        if (!empty($errors) && !is_int($lots["price"]) && $lots["price"] <= 0) {
             $errors["price"] = "Введите целое число больше ноля";
         }
-        if (!empty($errors) && !is_int($_POST["step_price"]) && $_POST["step_price"] <= 0) {
+        if (!empty($errors) && !is_int($lots["step_price"]) && $lots["step_price"] <= 0) {
             $errors["step_price"] = "Введите целое число больше ноля";
         }
 
@@ -113,7 +104,7 @@ if (isset($_SESSION["user"])) {
         }
     } else {
         $error = mysqli_error($link);
-        $content = include_template("404.html", ["error" => $error]);
+        $content = include_template("error.php", ["error" => $error]);
     }
 } else {
     http_response_code(403);

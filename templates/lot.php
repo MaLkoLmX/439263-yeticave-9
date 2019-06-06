@@ -1,8 +1,9 @@
 <nav class="nav">
     <ul class="nav__list container">
         <?php foreach ($categories as $key => $item): ?>
-            <li class="nav__item">
-                <a href="all-lots.html"><?= $item["name"]; ?></a>
+            <li class="promo__item">
+                <a class="promo__link"
+                   href="all-lots.php?cat=<?= $item["id"]; ?>&name=<?= $item["name"]; ?>"><?= esc($item["name"]); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -11,28 +12,28 @@
     <?php foreach ($lots
 
     as $key => $item): ?>
-    <h2><?= $item["title"]; ?></h2>
+    <h2><?= esc($item["title"]); ?></h2>
     <div class="lot-item__content">
         <div class="lot-item__left">
             <div class="lot-item__image">
                 <img src="<?= $item["image"]; ?>" width="730" height="548" alt="<?= $item["categories"]; ?>">
             </div>
-            <p class="lot-item__category">Категория: <span><?= $item["categories"]; ?></span></p>
-            <p class="lot-item__description"><?= $item["description"]; ?></p>
+            <p class="lot-item__category">Категория: <span><?= esc($item["categories"]); ?></span></p>
+            <p class="lot-item__description"><?= esc($item["description"]); ?></p>
         </div>
         <div class="lot-item__right">
             <?php if (isset($_SESSION["user"])): ?>
             <div class="lot-item__state">
                 <div class="lot-item__timer timer <?= (get_time($item["date_finish"])) <= "01:00" ? "timer--finishing" : ""; ?>">
-                    <?= get_time($item["date_finish"]); ?>
+                    <?= esc(get_time($item["date_finish"])); ?>
                 </div>
                 <div class="lot-item__cost-state">
                     <div class="lot-item__rate">
                         <span class="lot-item__amount">Текущая цена</span>
-                        <span class="lot-item__cost"><?= get_price($item["price"]); ?></span>
+                        <span class="lot-item__cost"><?= esc(get_price($item["price"])); ?></span>
                     </div>
                     <div class="lot-item__min-cost">
-                        Мин. ставка <span><?= $item["price"] + $item["step_price"]; ?> р</span>
+                        Мин. ставка <span><?= esc($item["price"] + $item["step_price"]); ?> р</span>
                     </div>
                 </div>
                 <form class="lot-item__form" action="" method="post" autocomplete="off">
@@ -46,58 +47,15 @@
                 </form>
             </div>
             <div class="history">
-                <h3>История ставок (<span>10</span>)</h3>
+                <h3>История ставок (<span><?= $count_rate; ?></span>)</h3>
                 <table class="history__list">
-                    <tr class="history__item">
-                        <td class="history__name">Иван</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">5 минут назад</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Константин</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">20 минут назад</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Евгений</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">Час назад</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Игорь</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 08:21</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Енакентий</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 13:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Семён</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 12:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Илья</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 10:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Енакентий</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 13:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Семён</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 12:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Илья</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 10:20</td>
-                    </tr>
+                    <?php foreach ($rate as $key => $item): ?>
+                        <tr class="history__item">
+                            <td class="history__name"><?= esc($item["user_name"]); ?></td>
+                            <td class="history__price"><?= esc(get_price($item["amount"])); ?></td>
+                            <td class="history__time"><?= esc(date_bets($item["date_rate"])); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </table>
             </div>
         </div>
