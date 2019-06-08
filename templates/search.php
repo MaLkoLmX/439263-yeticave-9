@@ -10,7 +10,7 @@
 </nav>
 <div class="container">
     <section class="lots">
-        <h2>Результаты поиска по запросу «<span><?= esc($search); ?></span>»</h2>
+        <h2>Результаты поиска по запросу «<span><?= $search; ?></span>»</h2>
         <ul class="lots__list">
             <?php foreach ($lots as $key => $item): ?>
                 <li class="lots__item lot">
@@ -36,11 +36,13 @@
             <?php endforeach; ?>
         </ul>
     </section>
-    <?php if ($pages > 1): ?>
+    <?php if ($pages_count > 1): ?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev">
                 <a href="/search.php?search=<?= $search; ?>&page=<?php if ($cur_page > 1) {
                     print($cur_page - 1);
+                } else {
+                    print $cur_page;
                 } ?>">Назад</a>
             </li>
             <?php foreach ($pages as $page): ?>
@@ -51,6 +53,8 @@
             <li class="pagination-item pagination-item-next">
                 <a href="/search.php?search=<?= $search; ?>&page=<?php if ($cur_page < $pages_count) {
                     print($cur_page + 1);
+                } else {
+                    print $cur_page;
                 } ?>">Вперед</a>
             </li>
         </ul>

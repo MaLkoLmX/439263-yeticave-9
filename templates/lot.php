@@ -41,7 +41,7 @@
                         <label for="cost">Ваша ставка</label>
                         <input id="cost" type="text" name="rate"
                                placeholder="<?= $lots["price"] + $lots["step_price"]; ?>">
-                        <span class="form__error"><?= isset($errors) ? $errors["rate"] : ""; ?></span>
+                        <span class="form__error"><?= isset($errors) ? esc($errors["rate"]) : ""; ?></span>
                     </p>
                     <button type="submit" class="button">Сделать ставку</button>
                 </form>

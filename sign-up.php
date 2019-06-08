@@ -3,9 +3,7 @@ require_once("helpers.php");
 require_once("functions.php");
 require_once("link.php");
 
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $form = $_POST;
     $req_fields = ["email", "password", "name", "message"];
     $errors = [];

@@ -8,14 +8,11 @@ if (!$link) {
     die();
 }
 
+session_start();
+
 if ($_SESSION) {
     $user = $_SESSION["user"];
 }
 
-$is_auth = rand(0, 1);
-
-$user_name = "Кадиров Сергей";
-
-$index = 0;
-$num_count = count($categories);
+$user_name = $user["name"];
 ?>

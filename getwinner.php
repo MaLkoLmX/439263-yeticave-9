@@ -12,11 +12,13 @@ $mailer = new Swift_Mailer($transport);
 $logger = new Swift_Plugins_Loggers_ArrayLogger();
 $mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
 
+$id = $user["id"];
+
 if (isset($_SESSION["user"])) {
 
     $sql = "SELECT r.id_user, u.name as name_user, u.email, l.name as name_lot, l.id FROM lot l
             LEFT OUTER JOIN rate r ON l.id=r.id_lot
-            LEFT OUTER JOIN user u ON r.id_user=u.id
+            LEFT OUTER JOIN user u ON $id = u.id
             WHERE l.date_finish <= NOW() AND l.id_winner is NULL
             ORDER BY r.date_rate DESC LIMIT 1";
 

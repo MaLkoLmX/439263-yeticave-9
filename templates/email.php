@@ -1,5 +1,5 @@
 <h1>Поздравляем с победой</h1>
-<p>Здравствуйте, <?= $rate["name_user"]; ?></p>
+<p>Здравствуйте, <?= esc($rate["name_user"]); ?></p>
 <p>Ваша ставка для лота <a
             href="http://439263-yeticave-9:8080/lot.php?id=<?= $rate["id"]; ?>"><?= esc($rate["name_lot"]); ?></a>
     победила.</p>

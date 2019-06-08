@@ -3,24 +3,25 @@ require_once("helpers.php");
 require_once("functions.php");
 require_once("link.php");
 
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $form = $_POST;
 
     $required = ["email", "password"];
     $errors = [];
+
     foreach ($required as $field) {
         if (empty($form[$field])) {
             $errors[$field] = "Это поле надо заполнить";
         }
     }
 
-    $email = mysqli_real_escape_string($link, $form["email"]);
-    $sql = "SELECT * FROM user WHERE email = '$email'";
-    $res = mysqli_query($link, $sql);
+    if (isset($form["email"])) {
+        $email = mysqli_real_escape_string($link, $form["email"]);
+        $sql = "SELECT * FROM user WHERE email = '$email'";
+        $res = mysqli_query($link, $sql);
 
-    $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
+        $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
+    }
 
     if (!count($errors) && $user) {
         if (password_verify($form["password"], $user["password"])) {
@@ -56,8 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $login_content = include_template("layout.php", [
     "categories" => get_categories($link),
     "content" => $page_content,
-    "user_name" => $user,
-    "title" => "Войти",
+    "user_name" => $user_name,
+    "title" => "Войти"
 ]);
 
 print($login_content);

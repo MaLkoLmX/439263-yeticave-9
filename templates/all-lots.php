@@ -36,11 +36,13 @@
             <?php endforeach; ?>
         </ul>
     </section>
-    <?php if ($pages > 1): ?>
+    <?php if ($pages_count > 1): ?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev">
                 <a href="/all-lots.php?cat=<?= $cat_id; ?>&page=<?php if ($cur_page > 1) {
                     print($cur_page - 1);
+                } else {
+                    print $cur_page;
                 } ?>&name=<?= $cat_name; ?>">Назад</a>
             </li>
             <?php foreach ($pages as $page): ?>
@@ -51,6 +53,8 @@
             <li class="pagination-item pagination-item-next">
                 <a href="/all-lots.php?cat=<?= $cat_id; ?>&page=<?php if ($cur_page < $pages_count) {
                     print($cur_page + 1);
+                } else {
+                    print $cur_page;
                 } ?>&name=<?= $cat_name; ?>">Вперед</a>
             </li>
         </ul>

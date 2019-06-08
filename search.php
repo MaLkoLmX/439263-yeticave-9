@@ -3,20 +3,14 @@ require_once("helpers.php");
 require_once("functions.php");
 require_once("link.php");
 
-session_start();
-
-if ($_SESSION) {
-    $user = $_SESSION["user"];
-}
-
 mysqli_query($link, "CREATE FULLTEXT INDEX lot_search ON lot(name, description)");
 
-$search = $_GET["search"] ?? "";
+$search = esc($_GET["search"] ?? "");
 
-if ($search) {
+if (!empty($search)) {
 
     $cur_page = $_GET["page"] ?? 1;
-    $page_items = 6;
+    $page_items = 9;
     $sql = "SELECT COUNT(*) as cnt FROM lot WHERE MATCH(name, description) AGAINST(?)";
     $stmt = db_get_prepare_stmt($link, $sql, [$search]);
     mysqli_stmt_execute($stmt);
@@ -37,21 +31,27 @@ if ($search) {
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
-}
 
-$page_content = include_template("search.php", [
-    "categories" => get_categories($link),
-    "lots" => $lots,
-    "search" => $search,
-    "pages" => $pages,
-    "pages_count" => $pages_count,
-    "cur_page" => $cur_page
-]);
+    $page_content = include_template("search.php", [
+        "categories" => get_categories($link),
+        "lots" => $lots,
+        "search" => $search,
+        "pages" => $pages,
+        "pages_count" => $pages_count,
+        "cur_page" => $cur_page
+    ]);
+} else {
+    $page_content = include_template("error.php", [
+        "categories" => get_categories($link),
+        "error_title" => "Строка поиска пуста.",
+        "error" => "Пожалуйста укажите информацию для поиска."
+    ]);
+}
 
 $lots_content = include_template("layout.php", [
     "categories" => get_categories($link),
     "content" => $page_content,
-    "user_name" => $user["name"],
+    "user_name" => $user_name,
     "title" => "Лот"
 ]);
 

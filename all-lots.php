@@ -3,15 +3,12 @@ require_once("helpers.php");
 require_once("functions.php");
 require_once("link.php");
 
-session_start();
-
-
 mysqli_query($link, "CREATE FULLTEXT INDEX lot_search ON lot(name, description)");
 
 $cat_id = $_GET["cat"] ?? "";
 $cat_name = $_GET["name"] ?? "";
 
-if ($cat_id) {
+if (!empty($cat_id)) {
 
     $cur_page = $_GET["page"] ?? 1;
     $page_items = 6;
@@ -50,7 +47,7 @@ $page_content = include_template("all-lots.php", [
 $layout_content = include_template("layout.php", [
     "content" => $page_content,
     "categories" => get_categories($link),
-    "user_name" => $user["name"],
+    "user_name" => $user_name,
     "title" => "Все лоты"
 ]);
 print($layout_content);

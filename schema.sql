@@ -9,7 +9,7 @@ CREATE TABLE categories (
   name CHAR(60) UNIQUE,
   code CHAR(30) UNIQUE
 );
-USE yaticave;
+
 CREATE TABLE lot (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -24,7 +24,6 @@ CREATE TABLE lot (
   id_category INT
 );
 
-USE yaticave;
 CREATE TABLE rate (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_rate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -33,7 +32,6 @@ CREATE TABLE rate (
   id_lot INT
 );
 
-USE yaticave;
 CREATE TABLE user (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_reg TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -43,4 +41,3 @@ CREATE TABLE user (
   avatar CHAR(128),
   contact CHAR(255)
 );
-

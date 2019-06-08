@@ -3,23 +3,10 @@ require_once("helpers.php");
 require_once("functions.php");
 require_once("link.php");
 
-session_start();
-
-if ($_SESSION) {
-    $user = $_SESSION["user"];
-}
-
 $id = (int)$_GET["id"];
 $id_user = $user["id"];
 
-if (!isset($_GET["id"])) {
-    http_response_code(404);
-    $page_content = include_template("error.php", [
-        "categories" => $categories,
-        "error_title" => "Ошибка 404",
-        "error" => "Страницы не найдена"
-    ]);
-} else {
+if (isset($_GET["id"])) {
     $sql = "SELECT l.id as id_lot, l.name as title, description, price, step_price, (price + step_price) as min_price, image, c.name as categories, MAX(r.amount) as rate_price, date_finish FROM lot l
         JOIN categories c ON l.id_category = c.id
         LEFT OUTER JOIN rate r ON r.id_lot = l.id
@@ -43,7 +30,7 @@ if (!isset($_GET["id"])) {
     $result = mysqli_query($link, $sql);
     $rate = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $form = $_POST;
         $required = ["rate"];
         $errors = [];
@@ -59,11 +46,11 @@ if (!isset($_GET["id"])) {
             $errors["rate"] = "Введите сумму больше минимальной ставки";
         }
 
-        if (count($errors)) {
+        if (!empty($errors)) {
             $page_content = include_template("lot.php", [
                 "categories" => $categories,
                 "lots" => $lots,
-                "errors" => $errors,
+                "errors" => $errors
             ]);
         } else {
             $sql = "INSERT INTO rate (date_rate, amount, id_user, id_lot) VALUES (NOW(), ?, ?, ?)";
@@ -73,13 +60,8 @@ if (!isset($_GET["id"])) {
             if ($res) {
                 header("Refresh: 0");
                 die();
-            } else {
-                $page_content = include_template("error.php", [
-                    "error" => mysqli_error($link)
-                ]);
             }
         }
-
     }
 }
 
@@ -87,14 +69,14 @@ $page_content = include_template("lot.php", [
     "categories" => get_categories($link),
     "errors" => $errors,
     "lots" => $lots,
-    'count_rate' => $count_rate,
+    "count_rate" => $count_rate,
     "rate" => $rate
 ]);
 
 $lots_content = include_template("layout.php", [
     "categories" => get_categories($link),
     "content" => $page_content,
-    "user_name" => $user["name"],
+    "user_name" => $user_name,
     "title" => "Лот"
 ]);
 
