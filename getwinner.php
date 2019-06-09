@@ -16,8 +16,8 @@ $id = $user["id"];
 
 if (isset($_SESSION["user"])) {
 
-    $sql = "SELECT r.id_user, u.name as name_user, u.email, l.name as name_lot, l.id FROM lot l
-            LEFT OUTER JOIN rate r ON l.id=r.id_lot
+    $sql = "SELECT r.id_user, u.name as name_user, u.email, l.name as name_lot, l.id as lot_id FROM lot l
+            LEFT OUTER JOIN rate r ON l.id = r.id_lot
             LEFT OUTER JOIN user u ON $id = u.id
             WHERE l.date_finish <= NOW() AND l.id_winner is NULL
             ORDER BY r.date_rate DESC LIMIT 1";
@@ -25,8 +25,9 @@ if (isset($_SESSION["user"])) {
     $result = mysqli_query($link, $sql);
     $rate = mysqli_fetch_assoc($result);
     if ($rate) {
+        $id_lot = $rate["lot_id"];
         $sql = "UPDATE lot SET id_winner = (?) WHERE id = (?)";
-        $stmt = db_get_prepare_stmt($link, $sql, [$rate[0]["id_user"], $id]);
+        $stmt = db_get_prepare_stmt($link, $sql, [$id, $id_lot]);
         $res = mysqli_stmt_execute($stmt);
         if ($res) {
             $id_lot = mysqli_insert_id($link);
@@ -47,5 +48,5 @@ if (isset($_SESSION["user"])) {
             print("Не удалось отправить сообщение: " . $logger->dump());
         }
     }
-}
+}print_r($rate);
 ?>
